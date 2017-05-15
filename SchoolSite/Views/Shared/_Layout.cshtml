@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>@ViewBag.Title</title>
+        <link href="~/Content/style.css" rel="stylesheet" type="text/css" />
+        <script src="~/Scripts/react.js"></script>
+        <script src="~/Scripts/react-dom.js"></script>
+        <script src="~/Scripts/browser.min.js"></script>
+        <script src="~/Scripts/jquery-3.2.1.min.js"></script>
+
+        <script src="~/Scripts/base.js"></script>
+        <script type="text/babel" src="~/Scripts/main.jsx"></script>
+    </head>
+    <body>
+
+        <div class="container">
+
+            <div class="header">
+                <a href="#" class="navigation-item">Schools</a>
+                <a href="#" class="navigation-item">Students</a>
+                <a href="#" class="navigation-item">Subjects</a>
+                <a href="#" class="navigation-item">Mark</a>
+            </div><br />
+
+            @RenderBody()
+            <hr />
+            <footer>
+                <p>&copy; @DateTime.Now.Year - School Site</p>
+            </footer>
+        </div>
+
+    </body>
+</html>

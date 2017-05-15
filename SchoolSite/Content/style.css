@@ -1,0 +1,108 @@
+﻿.header {
+    padding: 5px;
+    height: 200%;
+    background-color: navy;
+    color: white;
+}
+
+.container {
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.content {
+
+}
+
+.footer {
+
+}
+
+.navigation-item {
+    text-decoration: none;
+    color: white;
+}
+
+.div-table {
+    display: inline-block
+}
+
+.div-row-head, .div-row {
+    border: 1px solid black;
+    padding: 2px;
+    text-align: left;
+    margin-bottom: 2px;
+
+}
+.div-row-head {
+    background-color: azure;
+}
+
+.div-col {
+    width: 200px;
+    padding: 2px;
+    display: inline-block;
+}
+
+.div-col:first-child {
+    width: 50px;
+}
+
+.div-col:nth-last-child(1), .div-col:nth-last-child(2) {
+    width: 100px;
+}
+
+
+.btn-edit {
+    background-color: darkturquoise;
+}
+
+.btn-remove, .btn-cancel {
+    background-color: orangered;
+}
+
+.btn-add, .btn-save {
+    background-color: forestgreen;
+}
+
+.btn-save {
+    float: left;
+}
+
+.btn-cancel {
+    float: right;
+}
+
+.btn-edit, .btn-remove, .btn-add, .btn-save, btn-cancel {
+    min-width: 70px;
+    padding: 5px;
+    font-size: 14px;
+
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.visible-pop-up, .invisible-pop-up {
+    position: absolute;
+    margin: auto;
+    background: #eeeeee;
+    border: 1px solid black;
+    padding: 5px;
+    top: 50%;
+    left: 50%;
+}
+
+.visible-pop-up  {
+    visibility: visible;
+}
+
+.invisible-pop-up {
+    visibility: hidden;
+}
+
+.input-form {
+
+}
