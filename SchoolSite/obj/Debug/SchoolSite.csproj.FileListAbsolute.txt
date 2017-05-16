@@ -48,3 +48,17 @@ c:\users\user 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite\bin\
 c:\users\user 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite\bin\EntityFramework.SqlServer.dll
 c:\users\user 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite\bin\EntityFramework.xml
 c:\users\user 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite\bin\EntityFramework.SqlServer.xml
+C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite\bin\Autofac.dll
+C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite\bin\AutoMapper.dll
+C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite\bin\SchoolSite.Domain.Core.dll
+C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite\bin\SchoolSite.Domain.Interfaces.dll
+C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite\bin\SchoolSite.Infrastructure.Business.dll
+C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite\bin\SchoolSite.Services.Interfaces.dll
+C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite\bin\SchoolSite.Infrastructure.Data.dll
+C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite\bin\SchoolSite.Domain.Core.pdb
+C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite\bin\SchoolSite.Domain.Interfaces.pdb
+C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite\bin\SchoolSite.Infrastructure.Business.pdb
+C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite\bin\SchoolSite.Services.Interfaces.pdb
+C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite\bin\Autofac.xml
+C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite\bin\AutoMapper.xml
+C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite\bin\SchoolSite.Infrastructure.Data.pdb

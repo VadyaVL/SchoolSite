@@ -8,14 +8,14 @@
             firstName: "",
             lastName: "",
             age: "",
-            schoolId: "",
+            schoolId: 1,
             statePopUP: "invisible-pop-up"
         };
         
         ajax.makeAjax("http://localhost:2175/School/JSON_School",
                         {},
                         function (data) {
-                            self.setState({ schools: JSON.parse(data) });
+                            self.setState({ schools: JSON.parse(data).Items });
                         });
 
         this.saveData = this.saveData.bind(this);
@@ -55,7 +55,7 @@
         ajax.makeAjax("http://localhost:2175/Student/JSON_Student",
                         { },
                         function (data) {
-                            self.setState({ data: JSON.parse(data) });
+                            self.setState({ data: JSON.parse(data).Items });
                         });
     }
 

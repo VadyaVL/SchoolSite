@@ -1,4 +1,6 @@
-﻿using SchoolSite.Models;
+﻿using SchoolSite.Domain.Core;
+using SchoolSite.Infrastructure.Business;
+using SchoolSite.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +11,13 @@ namespace SchoolSite.Controllers
 {
     public class StudentController : Controller
     {
+        private IStudentService studentService;
+
+        public StudentController() : base()
+        {
+            studentService = new StudentService();
+        }
+
         // GET: Student
         public ActionResult Index()
         {
@@ -18,8 +27,8 @@ namespace SchoolSite.Controllers
         public ActionResult JSON_Student()
         {
             this.ControllerContext.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-
-            return Json(SchoolDBContext.GetInstance().Students, JsonRequestBehavior.AllowGet);
+            
+            return Json(studentService.GetStudentFeed(0, 10), JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult PostStudent(int id, String firstName, String lastName, int age, int schoolId)
@@ -34,20 +43,11 @@ namespace SchoolSite.Controllers
                 s.Age = age;
                 s.SchoolId = schoolId;
 
-                SchoolDBContext.GetInstance().Students.Add(s);
+                studentService.Save(s);
             }
             else
             {
-                Student fStudent = null;
-
-                foreach (Student st in SchoolDBContext.GetInstance().Students)
-                {
-                    if (st.Id == id)
-                    {
-                        fStudent = st;
-                        break;
-                    }
-                }
+                Student fStudent = studentService.GetAll().Find(i => i.Id == id);
 
                 if (fStudent != null)
                 {
@@ -55,11 +55,10 @@ namespace SchoolSite.Controllers
                     fStudent.LastName = lastName;
                     fStudent.Age = age;
                     fStudent.SchoolId = schoolId;
+                    studentService.Update(fStudent);
                 }
             }
-
-            SchoolDBContext.GetInstance().SaveChanges();
-
+            
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
@@ -67,21 +66,11 @@ namespace SchoolSite.Controllers
         {
             this.ControllerContext.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
 
-            Student fStudent = null;
-
-            foreach (Student st in SchoolDBContext.GetInstance().Students)
-            {
-                if (st.Id == id)
-                {
-                    fStudent = st;
-                    break;
-                }
-            }
-
+            Student fStudent = studentService.GetAll().Find(i => i.Id == id);
+            
             if (fStudent != null)
             {
-                SchoolDBContext.GetInstance().Students.Remove(fStudent);
-                SchoolDBContext.GetInstance().SaveChanges();
+                studentService.Delete(fStudent.Id);
             }
 
             return Json(true, JsonRequestBehavior.AllowGet);

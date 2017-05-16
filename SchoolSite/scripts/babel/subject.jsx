@@ -37,7 +37,7 @@
         ajax.makeAjax("http://localhost:2175/Subject/JSON_Subject",
                         { },
                         function (data) {
-                            self.setState({ data: JSON.parse(data) });
+                            self.setState({ data: JSON.parse(data).Items });
                         });
     }
 

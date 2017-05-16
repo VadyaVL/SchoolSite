@@ -4,6 +4,7 @@
         
         this.state = {
             data: [],
+            miss: 0,
             name: '',
             statePopUP: "invisible-pop-up"
         };
@@ -35,9 +36,15 @@
     updateDataOnPage() {
         self = this;
         ajax.makeAjax(  "http://localhost:2175/School/JSON_School",
-                        { },
+                        {
+                            miss: self.state.miss
+                        },
                         function (data) {
-                            self.setState({ data: JSON.parse(data) });
+                            var jsonObj = JSON.parse(data);
+                            console.log(self.state.data + jsonObj.Items); vcdfvdfgfdffrewgfewf
+                            self.setState({
+                                miss: jsonObj.Skip,
+                                data: self.state.data + jsonObj.Items });
                         });
     }
 
@@ -93,7 +100,11 @@
                         <div className="div-col"></div>
                     </div>
                    {this.getRows(this.state.data)}
-               </div>
+               </div><br />
+
+                <div>
+                    <button className="btn-add" onClick={() => this.updateDataOnPage()}>See more</button>
+                </div><br />
 
                 <div className={this.state.statePopUP}>
                         <form className="input-form">

@@ -1,0 +1,7 @@
+C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite.Services.Interfaces\bin\Debug\SchoolSite.Services.Interfaces.dll
+C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite.Services.Interfaces\bin\Debug\SchoolSite.Services.Interfaces.pdb
+C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite.Services.Interfaces\bin\Debug\SchoolSite.Domain.Core.dll
+C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite.Services.Interfaces\bin\Debug\SchoolSite.Domain.Core.pdb
+C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite.Services.Interfaces\obj\Debug\SchoolSite.Services.Interfaces.csprojResolveAssemblyReference.cache
+C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite.Services.Interfaces\obj\Debug\SchoolSite.Services.Interfaces.dll
+C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite.Services.Interfaces\obj\Debug\SchoolSite.Services.Interfaces.pdb

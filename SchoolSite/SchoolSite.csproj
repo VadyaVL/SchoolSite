@@ -43,6 +43,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=4.5.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.4.5.0\lib\net45\Autofac.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AutoMapper, Version=6.0.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.6.0.2\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -142,11 +150,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Mark.cs" />
-    <Compile Include="Models\School.cs" />
-    <Compile Include="Models\SchoolDBContext.cs" />
-    <Compile Include="Models\Student.cs" />
-    <Compile Include="Models\Subject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -176,6 +179,25 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SchoolSite.Domain.Core\SchoolSite.Domain.Core.csproj">
+      <Project>{45cc0866-5e2f-449d-8db8-4626afb538ff}</Project>
+      <Name>SchoolSite.Domain.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SchoolSite.Domain.Interfaces\SchoolSite.Domain.Interfaces.csproj">
+      <Project>{c01f0559-2554-4d1c-857c-4003df519f14}</Project>
+      <Name>SchoolSite.Domain.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SchoolSite.Infrastructure.Business\SchoolSite.Infrastructure.Business.csproj">
+      <Project>{b1866338-f192-467a-8a28-fa1575734815}</Project>
+      <Name>SchoolSite.Infrastructure.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SchoolSite.Services.Interfaces\SchoolSite.Services.Interfaces.csproj">
+      <Project>{179314ad-4046-4d6f-b9e5-f224b289e534}</Project>
+      <Name>SchoolSite.Services.Interfaces</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

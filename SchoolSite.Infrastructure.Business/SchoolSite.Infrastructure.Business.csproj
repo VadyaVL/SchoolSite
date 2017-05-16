@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B1866338-F192-467A-8A28-FA1575734815}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SchoolSite.Infrastructure.Business</RootNamespace>
+    <AssemblyName>SchoolSite.Infrastructure.Business</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MarkService.cs" />
+    <Compile Include="SubjectService.cs" />
+    <Compile Include="StudentService.cs" />
+    <Compile Include="SchoolService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SchoolSite.Domain.Core\SchoolSite.Domain.Core.csproj">
+      <Project>{45cc0866-5e2f-449d-8db8-4626afb538ff}</Project>
+      <Name>SchoolSite.Domain.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SchoolSite.Domain.Interfaces\SchoolSite.Domain.Interfaces.csproj">
+      <Project>{c01f0559-2554-4d1c-857c-4003df519f14}</Project>
+      <Name>SchoolSite.Domain.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SchoolSite.Infrastructure.Data\SchoolSite.Infrastructure.Data.csproj">
+      <Project>{d8ab650c-0f82-4ad7-98a6-a5fa7a67003d}</Project>
+      <Name>SchoolSite.Infrastructure.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SchoolSite.Services.Interfaces\SchoolSite.Services.Interfaces.csproj">
+      <Project>{179314ad-4046-4d6f-b9e5-f224b289e534}</Project>
+      <Name>SchoolSite.Services.Interfaces</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,4 +1,6 @@
-﻿using SchoolSite.Models;
+﻿using SchoolSite.Domain.Core;
+using SchoolSite.Infrastructure.Business;
+using SchoolSite.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +11,12 @@ namespace SchoolSite.Controllers
 {
     public class SubjectController : Controller
     {
+        private ISubjectService subjectService;
+
+        public SubjectController() : base()
+        {
+            subjectService = new SubjectService();
+        }
         // GET: Subject
         public ActionResult Index()
         {
@@ -19,7 +27,7 @@ namespace SchoolSite.Controllers
         {
             this.ControllerContext.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
 
-            return Json(SchoolDBContext.GetInstance().Subjects, JsonRequestBehavior.AllowGet);
+            return Json(subjectService.GetSubjectFeed(0, 10), JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult PostSubject(int id, String title)
@@ -30,28 +38,18 @@ namespace SchoolSite.Controllers
             {
                 Subject s = new Subject();
                 s.Title = title;
-
-                SchoolDBContext.GetInstance().Subjects.Add(s);
+                subjectService.Save(s);
             }
             else
             {
-                Subject fSubject = null;
-
-                foreach (Subject sb in SchoolDBContext.GetInstance().Subjects)
-                {
-                    if (sb.Id == id)
-                    {
-                        fSubject = sb;
-                        break;
-                    }
-                }
+                Subject fSubject = subjectService.GetAll().Find(i => i.Id == id);
 
                 if (fSubject != null)
                 {
                     fSubject.Title = title;
+                    subjectService.Update(fSubject);
                 }
             }
-            SchoolDBContext.GetInstance().SaveChanges();
 
             return Json(true, JsonRequestBehavior.AllowGet);
         }
@@ -60,21 +58,11 @@ namespace SchoolSite.Controllers
         {
             this.ControllerContext.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
 
-            Subject fSubject = null;
-
-            foreach (Subject sb in SchoolDBContext.GetInstance().Subjects)
-            {
-                if (sb.Id == id)
-                {
-                    fSubject = sb;
-                    break;
-                }
-            }
+            Subject fSubject = subjectService.GetAll().Find(i => i.Id == id);
 
             if (fSubject != null)
             {
-                SchoolDBContext.GetInstance().Subjects.Remove(fSubject);
-                SchoolDBContext.GetInstance().SaveChanges();
+                subjectService.Delete(fSubject.Id);
             }
 
             return Json(true, JsonRequestBehavior.AllowGet);
