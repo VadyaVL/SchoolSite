@@ -1,4 +1,4 @@
-﻿class Table extends React.Component {
+﻿class SchoolData extends React.Component {
     constructor(props) {
         super(props);
         
@@ -114,4 +114,4 @@
     }
 }
 
-ReactDOM.render(<Table />, document.getElementById("dataSchool"));
+ReactDOM.render(<SchoolData />, document.getElementById("data"));

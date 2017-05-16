@@ -8,11 +8,25 @@ namespace SchoolSite.Models
 {
     public class SchoolDBContext : DbContext
     {
-        public SchoolDBContext() : base("name=SchoolDBCT")
-        {
 
+        private static SchoolDBContext _schoolDBContext = null;
+
+        public static SchoolDBContext GetInstance()
+        {
+            if (_schoolDBContext == null)
+            {
+                _schoolDBContext = new SchoolDBContext();
+            }
+
+            return _schoolDBContext;
         }
-        
+
+        private SchoolDBContext() : base("name=SchoolDBCT")
+        {
+            this.Database.CreateIfNotExists();
+            this.Configuration.ProxyCreationEnabled = false;
+        }
+
         public DbSet<School> Schools { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<Subject> Subjects { get; set; }

@@ -1,55 +1,54 @@
 ﻿using SchoolSite.Models;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
 namespace SchoolSite.Controllers
 {
-    public class SchoolController : Controller
-    {        
+    public class SubjectController : Controller
+    {
+        // GET: Subject
         public ActionResult Index()
         {
-            return View("school");
+            return View("subject");
         }
 
-
-        public ActionResult JSON_School()
+        public ActionResult JSON_Subject()
         {
             this.ControllerContext.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-            
-            return Json(SchoolDBContext.GetInstance().Schools, JsonRequestBehavior.AllowGet);
+
+            return Json(SchoolDBContext.GetInstance().Subjects, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult PostSchool(int id, String name)
+        public ActionResult PostSubject(int id, String title)
         {
             this.ControllerContext.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
 
             if (id == 0)
             {
-                School s = new School();
-                s.Name = name;
+                Subject s = new Subject();
+                s.Title = title;
 
-                SchoolDBContext.GetInstance().Schools.Add(s);
+                SchoolDBContext.GetInstance().Subjects.Add(s);
             }
             else
             {
-                School fSchool = null;
+                Subject fSubject = null;
 
-                foreach (School sc in SchoolDBContext.GetInstance().Schools)
+                foreach (Subject sb in SchoolDBContext.GetInstance().Subjects)
                 {
-                    if (sc.Id == id)
+                    if (sb.Id == id)
                     {
-                        fSchool = sc;
+                        fSubject = sb;
                         break;
                     }
                 }
 
-                if (fSchool != null)
+                if (fSubject != null)
                 {
-                    fSchool.Name = name;
+                    fSubject.Title = title;
                 }
             }
             SchoolDBContext.GetInstance().SaveChanges();
@@ -57,24 +56,24 @@ namespace SchoolSite.Controllers
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult RemoveSchool(int id)
+        public ActionResult RemoveSubject(int id)
         {
             this.ControllerContext.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
 
-            School fSchool = null;
+            Subject fSubject = null;
 
-            foreach(School sc in SchoolDBContext.GetInstance().Schools)
+            foreach (Subject sb in SchoolDBContext.GetInstance().Subjects)
             {
-                if(sc.Id == id)
+                if (sb.Id == id)
                 {
-                    fSchool = sc;
+                    fSubject = sb;
                     break;
                 }
             }
 
-            if (fSchool != null)
+            if (fSubject != null)
             {
-                SchoolDBContext.GetInstance().Schools.Remove(fSchool);
+                SchoolDBContext.GetInstance().Subjects.Remove(fSubject);
                 SchoolDBContext.GetInstance().SaveChanges();
             }
 

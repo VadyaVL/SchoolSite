@@ -96,6 +96,7 @@
 }
 
 .visible-pop-up  {
+    float: left;
     visibility: visible;
 }
 
@@ -103,6 +104,13 @@
     visibility: hidden;
 }
 
-.input-form {
-
+input, select {
+    display: block;
 }
+
+.input-form {
+    display: inline-block;
+    background: #eeeeee;
+    padding: 5px;
+}
+

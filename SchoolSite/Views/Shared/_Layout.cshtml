@@ -12,18 +12,21 @@
         <script src="~/Scripts/jquery-3.2.1.min.js"></script>
 
         <script src="~/Scripts/base.js"></script>
-        <script type="text/babel" src="~/Scripts/main.jsx"></script>
     </head>
     <body>
 
         <div class="container">
 
             <div class="header">
-                <a href="#" class="navigation-item">Schools</a>
-                <a href="#" class="navigation-item">Students</a>
-                <a href="#" class="navigation-item">Subjects</a>
+                <a href="@Url.Action("Index", "School")" class="navigation-item">Schools</a>
+                <a href="@Url.Action("Index", "Student")" class="navigation-item">Students</a>
+                <a href="@Url.Action("Index", "Subject")" class="navigation-item">Subjects</a>
                 <a href="#" class="navigation-item">Mark</a>
             </div><br />
+
+            <div id="data">
+
+            </div>
 
             @RenderBody()
             <hr />
