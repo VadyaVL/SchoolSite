@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SchoolSite.Service;
+using AutoMapper;
+using SchoolSite.Domain.DTO;
 
 namespace SchoolSite.Infrastructure.Business
 {
@@ -42,11 +44,24 @@ namespace SchoolSite.Infrastructure.Business
             uof.Save();
         }
 
-        public Feed<Subject> GetSubjectFeed(int miss, int take)
+        public Feed<SubjectViewModel> GetSubjectFeed(int take)
         {
-            List<Subject> all = uof.Subjects.GetAll().Skip(miss).Take(take).ToList();
+            Mapper.Initialize(cfg => cfg.CreateMap<Subject, SubjectViewModel>());
+            List<SubjectViewModel> all = Mapper.Map<List<Subject>, List<SubjectViewModel>>(uof.Subjects.GetAll().Take(take).ToList());
 
-            return new Feed<Subject>(all.Count, miss + take, all);
+            return new Feed<SubjectViewModel>(all);
+        }
+
+        public Feed<Subject> GetSubjectFeed()
+        {
+            List<Subject> all = uof.Subjects.GetAll().ToList();
+
+            return new Feed<Subject>(all);
+        }
+
+        public Subject Get(int id)
+        {
+            return uof.Subjects.GetById(id);
         }
     }
 }

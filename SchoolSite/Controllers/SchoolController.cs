@@ -25,12 +25,21 @@ namespace SchoolSite.Controllers
             return View("school");
         }
 
-
-        public ActionResult JSON_School(int miss = 0)
+        public ActionResult JSON_ALL_School()
         {
             this.ControllerContext.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
             
-            return Json(schoolService.GetSchoolFeed(miss, 10), JsonRequestBehavior.AllowGet);
+            return Json(schoolService.GetSchoolFeed(), JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult JSON_School(bool get = false, int count = 0)
+        {
+            this.ControllerContext.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+            
+            if(get)
+                return Json(schoolService.GetSchoolFeed(count + 10), JsonRequestBehavior.AllowGet);
+            else
+                return Json(schoolService.GetSchoolFeed(count), JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult PostSchool(int id, String name)

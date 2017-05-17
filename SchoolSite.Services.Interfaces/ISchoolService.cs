@@ -1,4 +1,5 @@
 ﻿using SchoolSite.Domain.Core;
+using SchoolSite.Domain.DTO;
 using SchoolSite.Service;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace SchoolSite.Services.Interfaces
         void Save(School item);
         void Delete(int id);
         void Update(School item);
-        Feed<School> GetSchoolFeed(int miss, int take);
+        Feed<SchoolViewModel> GetSchoolFeed(int take);
+        Feed<School> GetSchoolFeed();
     }
 }

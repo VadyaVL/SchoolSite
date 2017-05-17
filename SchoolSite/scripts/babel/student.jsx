@@ -5,17 +5,28 @@
         this.state = {
             data: [],
             schools: [],
+            subjects: [],
+            selected_subjects: [],
             firstName: "",
             lastName: "",
             age: "",
             schoolId: 1,
-            statePopUP: "invisible-pop-up"
+            statePopUP: "invisible-pop-up",
+            firstNameMess: "",
+            lastNameMess: "",
+            ageMess: ""
         };
-        
-        ajax.makeAjax("http://localhost:2175/School/JSON_School",
+
+        ajax.makeAjax("http://localhost:2175/School/JSON_ALL_School",
                         {},
                         function (data) {
                             self.setState({ schools: JSON.parse(data).Items });
+                        });
+
+        ajax.makeAjax("http://localhost:2175/Subject/JSON_ALL_Subject",
+                        {},
+                        function (data) {
+                            self.setState({ subjects: JSON.parse(data).Items });
                         });
 
         this.saveData = this.saveData.bind(this);
@@ -23,6 +34,7 @@
 
         this.getRows = this.getRows.bind(this);
         this.initComboBox = this.initComboBox.bind(this);
+        this.initComboBoxSubjects = this.initComboBoxSubjects.bind(this);
         this.changeStatePopUP = this.changeStatePopUP.bind(this);
         this.updateDataOnPage = this.updateDataOnPage.bind(this);
 
@@ -30,12 +42,45 @@
         this.changeLastName = this.changeLastName.bind(this);
         this.changeAge = this.changeAge.bind(this);
         this.changeSchool = this.changeSchool.bind(this);
+        this.changeSubjects = this.changeSubjects.bind(this);
         
-        this.updateDataOnPage();
+        this.updateDataOnPage(true);
     }
 
     saveData() {
         self = this;
+
+        self.setState({
+            firstNameMess: "",
+            lastNameMess: "",
+            ageMess: ""
+        });
+
+        var isOk = !(self.state.firstName === "" || self.state.lastName === "" || self.state.age === "");
+
+        if (!isOk) {
+
+            if (self.state.firstName === "") {
+                self.setState({
+                    firstNameMess: 'First Name is Empty!'
+                });
+            }
+
+            if (self.state.lastName === "") {
+                self.setState({
+                    lastNameMess: 'Last Name is Empty!'
+                });
+            }
+
+            if (self.state.firstName === "") {
+                self.setState({
+                    ageMess: 'Age is Empty!'
+                });
+            }
+
+            return;
+        }
+
         ajax.makeAjax(  "http://localhost:2175/Student/PostStudent",
                         {
                             id: self.state.edit ? self.state.edit.Id : 0,
@@ -43,19 +88,32 @@
                             lastName: self.state.lastName,
                             age: self.state.age,
                             schoolId: self.state.schoolId,
+                            subjects: self.state.selected_subjects.join()
                         },
                         function () {
+                            if (self.state.count % 10 != 0) {
+                                self.setState({
+                                    count: self.state.count + 1
+                                });
+                            }
                             self.updateDataOnPage();
                             self.changeStatePopUP();
                         });
     }
 
-    updateDataOnPage() {
+    updateDataOnPage(toLoad) {
         self = this;
         ajax.makeAjax("http://localhost:2175/Student/JSON_Student",
-                        { },
+                        {
+                            get: Boolean(toLoad),
+                            count: self.state.count
+                        },
                         function (data) {
-                            self.setState({ data: JSON.parse(data).Items });
+                            var jsonObj = JSON.parse(data);
+                            self.setState({
+                                count: jsonObj.Count,
+                                data: jsonObj.Items
+                            });
                         });
     }
 
@@ -77,6 +135,8 @@
             age: student ? student.Age : "",
             edit: student
         });
+
+        console.log(student ? student.Subjects : "");
 
         if (this.state.statePopUP === "invisible-pop-up") {
             this.setState({ statePopUP: "visible-pop-up" });
@@ -102,6 +162,18 @@
         this.setState({ schoolId: event.target.value });
     }
 
+    changeSubjects(event) {
+
+        var options = event.target.options;
+        var value = [];
+        for (var i = 0, l = options.length; i < l; i++) {
+            if (options[i].selected) {
+                value.push(parseInt(options[i].value));
+            }
+        }
+
+        this.setState({ selected_subjects: value});
+    }
 
     getRows(students) {
         return students.map((student) =>
@@ -121,9 +193,14 @@
         return schools.map((school) =>
             <option key={school.Id} value={school.Id}>{school.Name}</option>
         );
-
     }
-        
+
+    initComboBoxSubjects(subjects) {
+        return subjects.map((subject) =>
+            <option key={subject.Id} value={subject.Id }>{subject.Title}</option>
+        );
+    }
+
     render() {
         return (
             <div className="contentFromReact">
@@ -143,34 +220,52 @@
                     {this.getRows(this.state.data)}
         </div>
 
+
+        <div>
+            <button className="btn-add" onClick={() => this.updateDataOnPage(true)}>See more</button>
+        </div><br />
+
          <div className={this.state.statePopUP}>
                  <form className="input-form">
-                     <div>
-                        <label>
-                            First name:
-                            <input type="text" onChange={this.changeFirstName} value={this.state.firstName} placeholder="First name..." />
-                        </label>
-                     </div>
-                     <div>
-                        <label>
-                            Last name:
-                            <input type="text" onChange={this.changeLastName} value={this.state.lastName} placeholder="Last name..." />
-                        </label>
-                     </div>
-                     <div>
-                        <label>
-                            Age:
-                            <input type="number" onChange={this.changeAge} value={this.state.age} placeholder="Age..." />
-                        </label>
-                     </div>
-                     <div>
-                        <label>
-                            School:
-                             <select onChange={this.changeSchool}>
-                                 {this.initComboBox(this.state.schools)}
-                             </select>
-                        </label>
-                     </div>
+                         <div>
+                             <div>
+                                <label>
+                                    First name:
+                                    <input type="text" onChange={this.changeFirstName} value={this.state.firstName} placeholder="First name..." />
+                                </label>
+                                 <p className="errorMess">{this.state.firstNameMess}</p>
+                             </div>
+                             <div>
+                                <label>
+                                    Last name:
+                                    <input type="text" onChange={this.changeLastName} value={this.state.lastName} placeholder="Last name..." />
+                                </label>
+                                 <p className="errorMess">{this.state.lastNameMess}</p>
+                             </div>
+                             <div>
+                                <label>
+                                    Age:
+                                    <input type="number" onChange={this.changeAge} value={this.state.age} placeholder="Age..." />
+                                </label>                        
+                                 <p className="errorMess">{this.state.ageMess}</p>
+                             </div>
+                             <div>
+                                <label>
+                                    School:
+                                     <select onChange={this.changeSchool}>
+                                         {this.initComboBox(this.state.schools)}
+                                     </select>
+                                </label>
+                             </div>
+                        </div>
+
+                         <div>
+                                <label>
+                                    Subjects:
+                                     <select multiple onChange={this.changeSubjects}>{this.initComboBoxSubjects(this.state.subjects)}
+                                     </select>
+                                </label>
+                         </div>
                     <hr />
                     <div>
                         <button type="button" className="btn-save" onClick={() => this.saveData()}>Save</button>

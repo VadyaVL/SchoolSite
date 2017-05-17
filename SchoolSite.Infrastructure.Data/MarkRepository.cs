@@ -15,9 +15,9 @@ namespace SchoolSite.Infrastructure.Data
         private SchoolDBContext db;
         private bool disposed = false;
 
-        public MarkRepository()
+        public MarkRepository(SchoolDBContext db)
         {
-            this.db = SchoolDBContext.GetInstance();
+            this.db = db;
         }
 
         public void Create(Mark item)

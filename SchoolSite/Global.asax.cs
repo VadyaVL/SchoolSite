@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SchoolSite.Util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,6 +12,8 @@ namespace SchoolSite
     {
         protected void Application_Start()
         {
+            AutofacConfig.ConfigureContainer();
+
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
         }

@@ -47,6 +47,10 @@
       <HintPath>..\packages\Autofac.4.5.0\lib\net45\Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Autofac.Integration.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.Mvc5.4.0.2\lib\net45\Autofac.Integration.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="AutoMapper, Version=6.0.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.6.0.2\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
@@ -144,6 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\MarkController.cs" />
     <Compile Include="Controllers\SchoolController.cs" />
     <Compile Include="Controllers\StudentController.cs" />
     <Compile Include="Controllers\SubjectController.cs" />
@@ -151,6 +156,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\AutofacConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
@@ -170,6 +176,8 @@
     <Content Include="scripts\babel\subject.jsx" />
     <Content Include="Views\Student\Student.cshtml" />
     <Content Include="scripts\babel\student.jsx" />
+    <Content Include="Views\Mark\Mark.cshtml" />
+    <Content Include="scripts\babel\mark.jsx" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -193,6 +201,10 @@
     <ProjectReference Include="..\SchoolSite.Infrastructure.Business\SchoolSite.Infrastructure.Business.csproj">
       <Project>{b1866338-f192-467a-8a28-fa1575734815}</Project>
       <Name>SchoolSite.Infrastructure.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SchoolSite.Infrastructure.Data\SchoolSite.Infrastructure.Data.csproj">
+      <Project>{D8AB650C-0F82-4AD7-98A6-A5FA7A67003D}</Project>
+      <Name>SchoolSite.Infrastructure.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\SchoolSite.Services.Interfaces\SchoolSite.Services.Interfaces.csproj">
       <Project>{179314ad-4046-4d6f-b9e5-f224b289e534}</Project>

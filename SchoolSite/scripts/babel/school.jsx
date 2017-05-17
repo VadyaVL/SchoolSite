@@ -4,9 +4,10 @@
         
         this.state = {
             data: [],
-            miss: 0,
+            count: 0,
             name: '',
-            statePopUP: "invisible-pop-up"
+            statePopUP: "invisible-pop-up",
+            nameMess: ''
         };
         
         this.saveData = this.saveData.bind(this);
@@ -17,34 +18,53 @@
         this.updateDataOnPage = this.updateDataOnPage.bind(this);
         this.changeInputName = this.changeInputName.bind(this);
 
-        this.updateDataOnPage();
+        this.updateDataOnPage(true);
     }
 
     saveData() {
         self = this;
+
+        self.setState({
+            nameMess: ''
+        });
+
+        if (self.state.name === "") {
+            self.setState({
+                nameMess: 'Name is Empty!'
+            });
+
+            return;
+        }
+
         ajax.makeAjax(  "http://localhost:2175/School/PostSchool",
                         {
                             id: self.state.edit ? self.state.edit.Id : 0,
                             name: self.state.name
                         },
                         function () {
+                            if (self.state.count % 10 != 0) {
+                                self.setState({
+                                    count: self.state.count + 1
+                                });
+                            }
                             self.updateDataOnPage();
                             self.changeStatePopUP();
                         });
     }
 
-    updateDataOnPage() {
+    updateDataOnPage(toLoad) {
         self = this;
         ajax.makeAjax(  "http://localhost:2175/School/JSON_School",
                         {
-                            miss: self.state.miss
+                            get: Boolean(toLoad),
+                            count: self.state.count
                         },
                         function (data) {
                             var jsonObj = JSON.parse(data);
-                            console.log(self.state.data + jsonObj.Items); vcdfvdfgfdffrewgfewf
                             self.setState({
-                                miss: jsonObj.Skip,
-                                data: self.state.data + jsonObj.Items });
+                                count: jsonObj.Count,
+                                data: jsonObj.Items
+                            });
                         });
     }
 
@@ -103,7 +123,7 @@
                </div><br />
 
                 <div>
-                    <button className="btn-add" onClick={() => this.updateDataOnPage()}>See more</button>
+                    <button className="btn-add" onClick={() => this.updateDataOnPage(true)}>See more</button>
                 </div><br />
 
                 <div className={this.state.statePopUP}>
@@ -113,6 +133,7 @@
                                     Name:
                                     <input type="text" onChange={this.changeInputName} value={this.state.name} placeholder="Enter the school name..." />
                                 </label>
+                                <p className="errorMess">{this.state.nameMess}</p>
                             </div><hr />
                             <div>
                                 <button type="button" className="btn-save"      onClick={() => this.saveData()}>Save</button>

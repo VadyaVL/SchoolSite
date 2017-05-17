@@ -12,10 +12,12 @@ namespace SchoolSite.Controllers
     public class StudentController : Controller
     {
         private IStudentService studentService;
+        private ISubjectService subjectService;
 
         public StudentController() : base()
         {
             studentService = new StudentService();
+            subjectService = new SubjectService();
         }
 
         // GET: Student
@@ -23,17 +25,29 @@ namespace SchoolSite.Controllers
         {
             return View("Student");
         }
-        
-        public ActionResult JSON_Student()
+
+        public ActionResult JSON_ALL_Student()
         {
             this.ControllerContext.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-            
-            return Json(studentService.GetStudentFeed(0, 10), JsonRequestBehavior.AllowGet);
+
+            return Json(studentService.GetStudentFeed(), JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult PostStudent(int id, String firstName, String lastName, int age, int schoolId)
+        public ActionResult JSON_Student(bool get = false, int count = 0)
         {
             this.ControllerContext.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+
+            if (get)
+                return Json(studentService.GetStudentFeed(count + 10), JsonRequestBehavior.AllowGet);
+            else
+                return Json(studentService.GetStudentFeed(count), JsonRequestBehavior.AllowGet);
+        }
+        
+        public ActionResult PostStudent(int id, String firstName, String lastName, int age, int schoolId, string subjects)
+        {
+            this.ControllerContext.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+
+            var subs = subjects.Split(',').Select(x => Int32.Parse(x)).ToArray();
 
             if (id == 0)
             {
@@ -42,6 +56,13 @@ namespace SchoolSite.Controllers
                 s.LastName = lastName;
                 s.Age = age;
                 s.SchoolId = schoolId;
+                
+                s.Subjects = new List<Subject>();
+
+                foreach(int i in subs)
+                {
+                    s.Subjects.Add(subjectService.Get(i));
+                }
 
                 studentService.Save(s);
             }
@@ -56,6 +77,15 @@ namespace SchoolSite.Controllers
                     fStudent.Age = age;
                     fStudent.SchoolId = schoolId;
                     studentService.Update(fStudent);
+
+                    fStudent.Subjects = new List<Subject>();
+
+                    foreach (int i in subs)
+                    {
+                        fStudent.Subjects.Add(subjectService.Get(i));
+                    }
+
+
                 }
             }
             

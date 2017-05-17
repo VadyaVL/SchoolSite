@@ -22,12 +22,22 @@ namespace SchoolSite.Controllers
         {
             return View("subject");
         }
-
-        public ActionResult JSON_Subject()
+        
+        public ActionResult JSON_ALL_Subject()
         {
             this.ControllerContext.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
 
-            return Json(subjectService.GetSubjectFeed(0, 10), JsonRequestBehavior.AllowGet);
+            return Json(subjectService.GetSubjectFeed(), JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult JSON_Subject(bool get = false, int count = 0)
+        {
+            this.ControllerContext.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+
+            if (get)
+                return Json(subjectService.GetSubjectFeed(count + 10), JsonRequestBehavior.AllowGet);
+            else
+                return Json(subjectService.GetSubjectFeed(count), JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult PostSubject(int id, String title)

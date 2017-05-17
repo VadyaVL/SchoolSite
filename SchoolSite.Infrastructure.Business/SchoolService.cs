@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using SchoolSite.Domain.Core;
 using SchoolSite.Infrastructure.Data;
 using SchoolSite.Service;
+using AutoMapper;
+using SchoolSite.Domain.DTO;
 
 namespace SchoolSite.Infrastructure.Business
 {
@@ -30,11 +32,19 @@ namespace SchoolSite.Infrastructure.Business
             return (List<School>) uof.Schools.GetAll();
         }
 
-        public Feed<School> GetSchoolFeed(int miss, int take)
+        public Feed<SchoolViewModel> GetSchoolFeed(int take)
         {
-            List<School> all = uof.Schools.GetAll().Skip(miss).Take(take).ToList();
+            Mapper.Initialize(cfg => cfg.CreateMap<School, SchoolViewModel>());
+            List<SchoolViewModel> all = Mapper.Map<List<School>, List<SchoolViewModel>>(uof.Schools.GetAll().Take(take).ToList());
 
-            return new Feed<School>(all.Count, miss + take, all);
+            return new Feed<SchoolViewModel>(all);
+        }
+
+        public Feed<School> GetSchoolFeed()
+        {
+            List<School> all = uof.Schools.GetAll().ToList();
+
+            return new Feed<School>(all);
         }
 
         public void Save(School item)

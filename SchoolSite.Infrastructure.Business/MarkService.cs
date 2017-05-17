@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SchoolSite.Service;
+using AutoMapper;
+using SchoolSite.Domain.DTO;
 
 namespace SchoolSite.Infrastructure.Business
 {
@@ -30,11 +32,19 @@ namespace SchoolSite.Infrastructure.Business
             return (List<Mark>)uof.Marks.GetAll();
         }
 
-        public Feed<Mark> GetMarkFeed(int miss, int take)
+        public Feed<MarkViewModel> GetMarkFeed(int take)
         {
-            List<Mark> all = uof.Marks.GetAll().Skip(miss).Take(take).ToList();
+            Mapper.Initialize(cfg => cfg.CreateMap<Mark, MarkViewModel>());
+            List<MarkViewModel> all = Mapper.Map<List<Mark>, List<MarkViewModel>>(uof.Marks.GetAll().Take(take).ToList());
 
-            return new Feed<Mark>(all.Count, miss + take, all);
+            return new Feed<MarkViewModel>(all);
+        }
+
+        public Feed<Mark> GetMarkFeed()
+        {
+            List<Mark> all = uof.Marks.GetAll().ToList();
+
+            return new Feed<Mark>(all);
         }
 
         public void Save(Mark item)

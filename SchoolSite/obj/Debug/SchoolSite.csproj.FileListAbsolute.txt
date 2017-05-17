@@ -62,3 +62,5 @@ C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite\bin\
 C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite\bin\Autofac.xml
 C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite\bin\AutoMapper.xml
 C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite\bin\SchoolSite.Infrastructure.Data.pdb
+C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite\bin\Autofac.Integration.Mvc.dll
+C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite\bin\Autofac.Integration.Mvc.xml

@@ -5,7 +5,8 @@
         this.state = {
             data: [],
             title: '',
-            statePopUP: "invisible-pop-up"
+            statePopUP: "invisible-pop-up",
+            titleMess: ''
         };
         
         this.saveData = this.saveData.bind(this);
@@ -16,28 +17,55 @@
         this.updateDataOnPage = this.updateDataOnPage.bind(this);
         this.changeInputTitle = this.changeInputTitle.bind(this);
 
-        this.updateDataOnPage();
+        this.updateDataOnPage(true);
     }
 
     saveData() {
         self = this;
+
+        self.setState({
+            titleMess: ''
+        });
+
+        if (self.state.title === "") {
+            self.setState({
+                titleMess: 'Title is Empty!'
+            });
+
+            return;
+        }
+
         ajax.makeAjax(  "http://localhost:2175/Subject/PostSubject",
                         {
                             id: self.state.edit ? self.state.edit.Id : 0,
                             title: self.state.title
                         },
                         function () {
+                            if (self.state.count % 10 != 0) {
+                                self.setState({
+                                    count: self.state.count + 1
+                                });
+                            }
                             self.updateDataOnPage();
                             self.changeStatePopUP();
                         });
     }
 
-    updateDataOnPage() {
+    updateDataOnPage(toLoad) {
         self = this;
+        console.log(toLoad);
         ajax.makeAjax("http://localhost:2175/Subject/JSON_Subject",
-                        { },
+                        {
+                            get: Boolean(toLoad),
+                            count: self.state.count
+                        },
                         function (data) {
-                            self.setState({ data: JSON.parse(data).Items });
+                            var jsonObj = JSON.parse(data);
+                            console.log(jsonObj);
+                            self.setState({
+                                count: jsonObj.Count,
+                                data: jsonObj.Items
+                            });
                         });
     }
 
@@ -94,6 +122,10 @@
                     {this.getRows(this.state.data)}
         </div>
 
+            <div>
+                <button className="btn-add" onClick={() => this.updateDataOnPage(true)}>See more</button>
+            </div><br />
+
          <div className={this.state.statePopUP}>
                  <form className="input-form">
                      <div>
@@ -101,6 +133,7 @@
                             Title:
                                     <input type="text" onChange={this.changeInputTitle} value={this.state.title} placeholder="Enter the subject title..." />
                                 </label>
+                                <p className="errorMess">{this.state.titleMess}</p>
                             </div><hr />
                             <div>
                                 <button type="button" className="btn-save"      onClick={() => this.saveData()}>Save</button>

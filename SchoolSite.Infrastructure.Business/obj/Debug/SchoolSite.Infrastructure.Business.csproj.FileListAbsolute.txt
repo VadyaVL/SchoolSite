@@ -13,3 +13,5 @@ C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite.Infr
 C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite.Infrastructure.Business\obj\Debug\SchoolSite.Infrastructure.Business.csprojResolveAssemblyReference.cache
 C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite.Infrastructure.Business\obj\Debug\SchoolSite.Infrastructure.Business.dll
 C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite.Infrastructure.Business\obj\Debug\SchoolSite.Infrastructure.Business.pdb
+C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite.Infrastructure.Business\bin\Debug\AutoMapper.dll
+C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite.Infrastructure.Business\bin\Debug\AutoMapper.xml

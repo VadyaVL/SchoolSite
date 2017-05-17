@@ -26,6 +26,7 @@ namespace SchoolSite.Infrastructure.Data
         private SchoolDBContext() : base("name=SchoolDBCT")
         {
             this.Database.CreateIfNotExists();
+            this.Configuration.LazyLoadingEnabled = false;
             this.Configuration.ProxyCreationEnabled = false;
         }
 

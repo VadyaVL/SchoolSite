@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SchoolSite.Service;
+using AutoMapper;
+using SchoolSite.Domain.DTO;
 
 namespace SchoolSite.Infrastructure.Business
 {
@@ -26,7 +28,7 @@ namespace SchoolSite.Infrastructure.Business
 
         public void Delete(int id)
         {
-            uof.Schools.Delete(id);
+            uof.Students.Delete(id);
             uof.Save();
         }
 
@@ -42,11 +44,24 @@ namespace SchoolSite.Infrastructure.Business
             uof.Save();
         }
 
-        public Feed<Student> GetStudentFeed(int miss, int take)
+        public Feed<StudentViewModel> GetStudentFeed(int take)
         {
-            List<Student> all = uof.Students.GetAll().Skip(miss).Take(take).ToList();
+            Mapper.Initialize(cfg => cfg.CreateMap<Student, StudentViewModel>());
+            List<StudentViewModel> users = Mapper.Map<List<Student>, List<StudentViewModel>>(uof.Students.GetAll().Take(take).ToList());
 
-            return new Feed<Student>(all.Count, miss + take, all);
+            return new Feed<StudentViewModel>(users);
+        }
+
+        public Feed<Student> GetStudentFeed()
+        {
+            List<Student> all = uof.Students.GetAll().ToList();
+
+            return new Feed<Student>(all);
+        }
+
+        public Student Get(int id)
+        {
+            return uof.Students.GetById(id);
         }
     }
 }

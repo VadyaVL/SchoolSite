@@ -1,4 +1,5 @@
 ﻿using SchoolSite.Domain.Core;
+using SchoolSite.Domain.DTO;
 using SchoolSite.Service;
 using System;
 using System.Collections.Generic;
@@ -12,8 +13,10 @@ namespace SchoolSite.Services.Interfaces
     {
         List<Student> GetAll();
         void Save(Student item);
+        Student Get(int id);
         void Delete(int id);
         void Update(Student item);
-        Feed<Student> GetStudentFeed(int miss, int take);
+        Feed<StudentViewModel> GetStudentFeed(int take);
+        Feed<Student> GetStudentFeed();
     }
 }

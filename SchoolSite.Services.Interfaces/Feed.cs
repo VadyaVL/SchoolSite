@@ -9,17 +9,13 @@ namespace SchoolSite.Service
 {
     public class Feed<T>
     {
-        private List<T> list;
-
-        public int All { get; set; }
-        public int Skip { get; set; }
+        public int Count { get; set; }
         public List<T> Items { get; set; }
         
 
-        public Feed(int all, int skip, List<T> list)
+        public Feed(List<T> list)
         {
-            All = all;
-            Skip = skip;
+            Count = list.Count;
             this.Items = list;
         }
     }

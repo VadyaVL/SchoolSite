@@ -14,9 +14,9 @@ namespace SchoolSite.Infrastructure.Data
         private SchoolDBContext db;
         private bool disposed = false;
 
-        public SchoolRepository()
+        public SchoolRepository(SchoolDBContext db)
         {
-            this.db = SchoolDBContext.GetInstance();
+            this.db = db;
         }
 
         public void Create(School item)
