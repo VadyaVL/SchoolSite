@@ -13,6 +13,5 @@ namespace SchoolSite.Domain.Core.DTO
         public string LastName { get; set; }
         public int Age { get; set; }
         public int SchoolId { get; set; }
-        public virtual ICollection<Subject> Subjects { get; set; }
     }
 }

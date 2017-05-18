@@ -67,7 +67,16 @@ namespace SchoolSite.Infrastructure.Data
 
         public void Update(Mark item)
         {
-            db.Entry(item).State = EntityState.Modified;
+            var itemInDb = db.Marks.Find(item.Id);
+
+            if (itemInDb == null)
+            {
+                db.Marks.Add(item);
+                return;
+            }
+
+            db.Entry(itemInDb).CurrentValues.SetValues(item);
+            db.Entry(itemInDb).State = EntityState.Modified;
         }
     }
 }

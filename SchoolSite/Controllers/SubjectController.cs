@@ -1,4 +1,5 @@
 ﻿using SchoolSite.Domain.Core;
+using SchoolSite.Domain.DTO;
 using SchoolSite.Infrastructure.Business;
 using SchoolSite.Services.Interfaces;
 using System;
@@ -46,13 +47,13 @@ namespace SchoolSite.Controllers
 
             if (id == 0)
             {
-                Subject s = new Subject();
+                SubjectViewModel s = new SubjectViewModel();
                 s.Title = title;
                 subjectService.Save(s);
             }
             else
             {
-                Subject fSubject = subjectService.GetAll().Find(i => i.Id == id);
+                SubjectViewModel fSubject = subjectService.GetAll().Find(i => i.Id == id);
 
                 if (fSubject != null)
                 {
@@ -68,7 +69,7 @@ namespace SchoolSite.Controllers
         {
             this.ControllerContext.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
 
-            Subject fSubject = subjectService.GetAll().Find(i => i.Id == id);
+            SubjectViewModel fSubject = subjectService.GetAll().Find(i => i.Id == id);
 
             if (fSubject != null)
             {

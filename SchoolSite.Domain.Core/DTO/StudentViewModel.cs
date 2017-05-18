@@ -12,6 +12,6 @@ namespace SchoolSite.Domain.DTO
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public int Age { get; set; }
-        public School School { get; set; }
+        public SchoolViewModel School { get; set; }
     }
 }

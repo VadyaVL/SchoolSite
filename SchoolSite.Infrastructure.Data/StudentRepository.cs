@@ -67,7 +67,16 @@ namespace SchoolSite.Infrastructure.Data
 
         public void Update(Student item)
         {
-            db.Entry(item).State = EntityState.Modified;
+            var itemInDb = db.Students.Find(item.Id);
+            
+            if (itemInDb == null)
+            {
+                db.Students.Add(item);
+                return;
+            }
+            
+            db.Entry(itemInDb).CurrentValues.SetValues(item);
+            db.Entry(itemInDb).State = EntityState.Modified;
         }
     }
 }

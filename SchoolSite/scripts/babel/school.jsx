@@ -42,7 +42,7 @@
                             name: self.state.name
                         },
                         function () {
-                            if (self.state.count % 10 != 0) {
+                            if (self.state.count % 10 != 0 || self.state.count == 0) {
                                 self.setState({
                                     count: self.state.count + 1
                                 });
@@ -56,7 +56,7 @@
         self = this;
         ajax.makeAjax("http://localhost:2175/School/JSON_School",
                         {
-    get: Boolean(toLoad),
+                            get: Boolean(toLoad),
                             count: self.state.count
                         },
                         function (data) {

@@ -12,6 +12,7 @@ namespace SchoolSite
     {
         protected void Application_Start()
         {
+            MapperConfig.ConfigureMapper();
             AutofacConfig.ConfigureContainer();
 
             AreaRegistration.RegisterAllAreas();

@@ -123,3 +123,10 @@ input, select {
     background: #eeeeee;
     padding: 5px;
 }
+
+.errorMess {
+    padding: 0;
+    margin: 0;
+    float: right;
+    color: red;
+}

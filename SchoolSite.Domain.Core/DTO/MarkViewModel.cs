@@ -10,7 +10,7 @@ namespace SchoolSite.Domain.DTO
     {
         public int Id { get; set; }
         public float Value { get; set; }
-        public Student Student { get; set; }
-        public Subject Subject { get; set; }
+        public StudentViewModel Student { get; set; }
+        public SubjectViewModel Subject { get; set; }
     }
 }

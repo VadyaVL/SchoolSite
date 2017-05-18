@@ -7,18 +7,20 @@ using System.Threading.Tasks;
 using SchoolSite.Domain.Core;
 using SchoolSite.Infrastructure.Data;
 using SchoolSite.Service;
-using AutoMapper;
 using SchoolSite.Domain.DTO;
+using AutoMapper;
 
 namespace SchoolSite.Infrastructure.Business
 {
     public class SchoolService : ISchoolService
     {
         private UnitOfWork uof;
+        private IMapper mapp;
 
-        public SchoolService()
+        public SchoolService(UnitOfWork uof, Mapper mapper)
         {
-            uof = new UnitOfWork();
+            this.uof = uof;
+            mapp = mapper;
         }
 
         public void Delete(int id)
@@ -29,30 +31,24 @@ namespace SchoolSite.Infrastructure.Business
 
         public List<SchoolViewModel> GetAll()
         {
-            Mapper.Initialize(cfg => cfg.CreateMap<School, SchoolViewModel>());
-            
-            return Mapper.Map<List<School>, List<SchoolViewModel>>(uof.Schools.GetAll().ToList());
+            return mapp.Map<List<SchoolViewModel>>(uof.Schools.GetAll().ToList());
         }
 
         public Feed<SchoolViewModel> GetSchoolFeed(int take)
         {
-            Mapper.Initialize(cfg => cfg.CreateMap<School, SchoolViewModel>());
-            List<SchoolViewModel> all = Mapper.Map<List<School>, List<SchoolViewModel>>(uof.Schools.GetAll().Take(take).ToList());
+            List<SchoolViewModel> all = mapp.Map<List<SchoolViewModel>>(uof.Schools.GetAll().Take(take).ToList());
 
             return new Feed<SchoolViewModel>(all);
         }
 
         public Feed<SchoolViewModel> GetSchoolFeed()
         {
-            Mapper.Initialize(cfg => cfg.CreateMap<School, SchoolViewModel>());
-            //uof.Schools.Query(x => x.Students).Selec(x => Mapper.Map<School, SchoolViewModel>).Tolist();
-            return new Feed<SchoolViewModel>(Mapper.Map<List<School>, List<SchoolViewModel>>(uof.Schools.GetAll().ToList()));
+            return new Feed<SchoolViewModel>(mapp.Map<List<SchoolViewModel>>(uof.Schools.GetAll().ToList()));
         }
 
         public void Save(SchoolViewModel item)
         {
-            Mapper.Initialize(cfg => cfg.CreateMap<SchoolViewModel, School>());
-            School user = Mapper.Map<SchoolViewModel, School>(item);
+            School user = mapp.Map<School>(item);
 
             uof.Schools.Create(user);
             uof.Save();
@@ -60,8 +56,7 @@ namespace SchoolSite.Infrastructure.Business
 
         public void Update(SchoolViewModel item)
         {
-            Mapper.Initialize(cfg => cfg.CreateMap<SchoolViewModel, School>());
-            School user = Mapper.Map<SchoolViewModel, School>(item);
+            School user = mapp.Map<School>(item);
 
             uof.Schools.Update(user);
             uof.Save();

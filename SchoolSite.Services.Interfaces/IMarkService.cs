@@ -1,4 +1,5 @@
 ﻿using SchoolSite.Domain.Core;
+using SchoolSite.Domain.Core.DTO;
 using SchoolSite.Domain.DTO;
 using SchoolSite.Service;
 using System;
@@ -11,11 +12,11 @@ namespace SchoolSite.Services.Interfaces
 {
     public interface IMarkService
     {
-        List<Mark> GetAll();
-        void Save(Mark item);
+        List<MarkViewModel> GetAll();
+        void Save(MarkCreateUpdateModel item);
         void Delete(int id);
-        void Update(Mark item);
+        void Update(MarkCreateUpdateModel item);
         Feed<MarkViewModel> GetMarkFeed(int take);
-        Feed<Mark> GetMarkFeed();
+        Feed<MarkViewModel> GetMarkFeed();
     }
 }

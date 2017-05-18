@@ -46,14 +46,10 @@ namespace SchoolSite.Controllers
                 return Json(studentService.GetStudentFeed(count), JsonRequestBehavior.AllowGet);
         }
         
-        public ActionResult PostStudent(int id, String firstName, String lastName, int age, int schoolId, string subjects)
+        public ActionResult PostStudent(int id, String firstName, String lastName, int age, int schoolId)
         {
             this.ControllerContext.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-            int[] subs = new int[0];
-
-            if (subjects != "")
-                subs = subjects.Split(',').Select(x => Int32.Parse(x)).ToArray();
-
+           
             if (id == 0)
             {
                 StudentCreateUpdateModel s = new StudentCreateUpdateModel();
@@ -61,13 +57,6 @@ namespace SchoolSite.Controllers
                 s.LastName = lastName;
                 s.Age = age;
                 s.SchoolId = schoolId;
-                
-                s.Subjects = new List<Subject>();
-
-                foreach(int i in subs)
-                {
-                    s.Subjects.Add(subjectService.Get(i));
-                }
 
                 studentService.Save(s);
             }
@@ -85,13 +74,6 @@ namespace SchoolSite.Controllers
                     fStudent.Age = age;
                     fStudent.SchoolId = schoolId;
                     studentService.Update(fStudent);
-
-                    fStudent.Subjects = new List<Subject>();
-
-                    foreach (int i in subs)
-                    {
-                        fStudent.Subjects.Add(subjectService.Get(i));
-                    }
                 }
             }
             

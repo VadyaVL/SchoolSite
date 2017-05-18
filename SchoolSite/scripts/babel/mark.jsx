@@ -5,8 +5,8 @@
         this.state = {
             data: [],
             count: 0,
-            student: 1,
-            subject: 1,
+            student: null,
+            subject: null,
             students: [],
             subjects: [],
             value: '',
@@ -18,13 +18,19 @@
         ajax.makeAjax("http://localhost:2175/Student/JSON_ALL_Student",
                         {},
                         function (data) {
-                            self.setState({ students: JSON.parse(data).Items });
+                            self.setState({
+                                students: JSON.parse(data).Items,
+                                student: JSON.parse(data).Items ? JSON.parse(data).Items[0].Id : null,
+                            });
                         });
 
         ajax.makeAjax("http://localhost:2175/Subject/JSON_ALL_Subject",
                         {},
                         function (data) {
-                            self.setState({ subjects: JSON.parse(data).Items });
+                            self.setState({
+                                subjects: JSON.parse(data).Items,
+                                subject: JSON.parse(data).Items ? JSON.parse(data).Items[0].Id : null,
+                            });
                         });
 
         this.saveData = this.saveData.bind(this);
@@ -57,8 +63,6 @@
 
             return;
         }
-        console.log(self.state.student);
-        console.log(self.state.subject);
         ajax.makeAjax("http://localhost:2175/Mark/PostMark",
                         {
                             id: self.state.edit ? self.state.edit.Id : 0,
@@ -67,7 +71,7 @@
                             value: self.state.value,
                         },
                         function () {
-                            if (self.state.count % 10 != 0) {
+                            if (self.state.count % 10 != 0 || self.state.count == 0) {
                                 self.setState({
                                     count: self.state.count + 1
                                 });
@@ -132,7 +136,7 @@
         return marks.map((mark) =>
             <div className="div-row" key={mark.Id}>
                 <div className="div-col-num">{mark.Id}</div>
-                <div className="div-col">{mark.Student.FirstName}</div>
+                <div className="div-col">{mark.Student.LastName + " " + mark.Student.FirstName}</div>
                 <div className="div-col">{mark.Subject.Title}</div>
                 <div className="div-col-num">{mark.Value}</div>
                 <div className="div-col-btn"><button className="btn-edit" onClick={() => this.changeStatePopUP(mark)}>Edit</button></div>

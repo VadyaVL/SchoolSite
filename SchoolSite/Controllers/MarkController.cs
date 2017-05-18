@@ -1,4 +1,6 @@
 ﻿using SchoolSite.Domain.Core;
+using SchoolSite.Domain.Core.DTO;
+using SchoolSite.Domain.DTO;
 using SchoolSite.Infrastructure.Business;
 using SchoolSite.Services.Interfaces;
 using System;
@@ -45,30 +47,22 @@ namespace SchoolSite.Controllers
 
             if (id == 0)
             {
-                Mark m = new Mark();
-                m.Student = studentService.GetStudent(student_id);
-                m.Subject = subjectService.Get(subject_id);
+                MarkCreateUpdateModel m = new MarkCreateUpdateModel();
+                m.StudentId = student_id;
+                m.SubjectId = subject_id;
                 m.Value = value;
 
                 markService.Save(m);
             }
             else
             {
-                Mark fMark = null;
 
-                foreach (Mark m in markService.GetAll())
-                {
-                    if (m.Id == id)
-                    {
-                        fMark = m;
-                        break;
-                    }
-                }
-
+                MarkCreateUpdateModel fMark = new MarkCreateUpdateModel();
+                
                 if (fMark != null)
                 {
-                    fMark.Student = studentService.GetStudent(student_id);
-                    fMark.Subject = subjectService.Get(subject_id);
+                    fMark.StudentId = student_id;
+                    fMark.SubjectId = subject_id;
                     fMark.Value = value;
                     markService.Update(fMark);
                 }
@@ -81,9 +75,9 @@ namespace SchoolSite.Controllers
         {
             this.ControllerContext.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
 
-            Mark fMark = null;
+            MarkViewModel fMark = null;
 
-            foreach (Mark m in markService.GetAll())
+            foreach (MarkViewModel m in markService.GetAll())
             {
                 if (m.Id == id)
                 {

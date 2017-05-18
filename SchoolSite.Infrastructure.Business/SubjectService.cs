@@ -15,15 +15,17 @@ namespace SchoolSite.Infrastructure.Business
     public class SubjectService : ISubjectService
     {
         private UnitOfWork uof;
+        private IMapper mapp;
 
-        public SubjectService()
+        public SubjectService(UnitOfWork uof, Mapper mapper)
         {
-            uof = new UnitOfWork();
+            this.uof = uof;
+            mapp = mapper;
         }
 
-        public List<Subject> GetAll()
+        public List<SubjectViewModel> GetAll()
         {
-            return (List<Subject>)uof.Subjects.GetAll();
+            return mapp.Map<List<Subject>, List<SubjectViewModel>>(uof.Subjects.GetAll().ToList());
         }
 
         public void Delete(int id)
@@ -32,34 +34,40 @@ namespace SchoolSite.Infrastructure.Business
             uof.Save();
         }
 
-        public void Save(Subject item)
+        public void Save(SubjectViewModel item)
         {
-            uof.Subjects.Create(item);
+            Subject subject = mapp.Map<SubjectViewModel, Subject>(item);
+
+            uof.Subjects.Create(subject);
             uof.Save();
         }
 
-        public void Update(Subject item)
+        public void Update(SubjectViewModel item)
         {
-            uof.Subjects.Update(item);
+            Subject subject = mapp.Map<SubjectViewModel, Subject>(item);
+            
+            uof.Subjects.Update(subject);
             uof.Save();
         }
 
         public Feed<SubjectViewModel> GetSubjectFeed(int take)
         {
-            Mapper.Initialize(cfg => cfg.CreateMap<Subject, SubjectViewModel>());
-            List<SubjectViewModel> all = Mapper.Map<List<Subject>, List<SubjectViewModel>>(uof.Subjects.GetAll().Take(take).ToList());
+           List<SubjectViewModel> all = mapp.Map<List<Subject>, List<SubjectViewModel>>(uof.Subjects.GetAll().Take(take).ToList());
 
             return new Feed<SubjectViewModel>(all);
         }
 
-        public Feed<Subject> GetSubjectFeed()
+        public Feed<SubjectViewModel> GetSubjectFeed()
         {
-            List<Subject> all = uof.Subjects.GetAll().ToList();
-
-            return new Feed<Subject>(all);
+            return new Feed<SubjectViewModel>(mapp.Map<List<SubjectViewModel>>(uof.Subjects.GetAll().ToList()));
         }
 
-        public Subject Get(int id)
+        public SubjectViewModel Get(int id)
+        {
+            return mapp.Map<Subject, SubjectViewModel>(uof.Subjects.GetById(id));
+        }
+
+        public Subject GetSubject(int id)
         {
             return uof.Subjects.GetById(id);
         }

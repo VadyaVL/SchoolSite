@@ -9,16 +9,19 @@ using System.Threading.Tasks;
 using SchoolSite.Service;
 using AutoMapper;
 using SchoolSite.Domain.DTO;
+using SchoolSite.Domain.Core.DTO;
 
 namespace SchoolSite.Infrastructure.Business
 {
     public class MarkService : IMarkService
     {
         private UnitOfWork uof;
+        private IMapper mapp;
 
-        public MarkService()
+        public MarkService(UnitOfWork uof, Mapper mapper)
         {
-            uof = new UnitOfWork();
+            this.uof = uof;
+            mapp = mapper;
         }
 
         public void Delete(int id)
@@ -27,35 +30,34 @@ namespace SchoolSite.Infrastructure.Business
             uof.Save();
         }
 
-        public List<Mark> GetAll()
+        public List<MarkViewModel> GetAll()
         {
-            return (List<Mark>)uof.Marks.GetAll();
+            return mapp.Map<List<MarkViewModel>>(uof.Marks.GetAll().ToList());
         }
 
         public Feed<MarkViewModel> GetMarkFeed(int take)
         {
-            Mapper.Initialize(cfg => cfg.CreateMap<Mark, MarkViewModel>());
-            List<MarkViewModel> all = Mapper.Map<List<Mark>, List<MarkViewModel>>(uof.Marks.GetAll().Take(take).ToList());
-
-            return new Feed<MarkViewModel>(all);
+            return new Feed<MarkViewModel>(mapp.Map<List<MarkViewModel>>(uof.Marks.GetAll().Take(take).ToList()));
         }
 
-        public Feed<Mark> GetMarkFeed()
+        public Feed<MarkViewModel> GetMarkFeed()
         {
-            List<Mark> all = uof.Marks.GetAll().ToList();
-
-            return new Feed<Mark>(all);
+            return new Feed<MarkViewModel>(mapp.Map<List<MarkViewModel>>(uof.Marks.GetAll().ToList()));
         }
 
-        public void Save(Mark item)
+        public void Save(MarkCreateUpdateModel item)
         {
-            uof.Marks.Create(item);
+            Mark mark = mapp.Map<Mark>(item);
+
+            uof.Marks.Create(mark);
             uof.Save();
         }
 
-        public void Update(Mark item)
+        public void Update(MarkCreateUpdateModel item)
         {
-            uof.Marks.Update(item);
+            Mark mark = mapp.Map<Mark>(item);
+
+            uof.Marks.Update(mark);
             uof.Save();
         }
     }

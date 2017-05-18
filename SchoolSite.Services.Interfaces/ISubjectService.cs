@@ -11,12 +11,13 @@ namespace SchoolSite.Services.Interfaces
 {
     public interface ISubjectService
     {
-        List<Subject> GetAll();
-        void Save(Subject item);
-        Subject Get(int id);
+        List<SubjectViewModel> GetAll();
+        void Save(SubjectViewModel item);
+        SubjectViewModel Get(int id);
+        Subject GetSubject(int id);
         void Delete(int id);
-        void Update(Subject item);
+        void Update(SubjectViewModel item);
         Feed<SubjectViewModel> GetSubjectFeed(int take);
-        Feed<Subject> GetSubjectFeed();
+        Feed<SubjectViewModel> GetSubjectFeed();
     }
 }

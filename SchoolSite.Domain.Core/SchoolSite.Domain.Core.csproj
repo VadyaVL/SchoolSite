@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTO\MarkCreateUpdateModel.cs" />
     <Compile Include="DTO\MarkViewModel.cs" />
     <Compile Include="DTO\SchoolViewModel.cs" />
     <Compile Include="DTO\StudentCreateUpdateModel.cs" />

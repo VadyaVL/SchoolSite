@@ -5,12 +5,10 @@
         this.state = {
             data: [],
             schools: [],
-            subjects: [],
-            selected_subjects: [],
             firstName: "",
             lastName: "",
             age: "",
-            schoolId: 1,
+            schoolId: null,
             statePopUP: "invisible-pop-up",
             firstNameMess: "",
             lastNameMess: "",
@@ -20,13 +18,10 @@
         ajax.makeAjax("http://localhost:2175/School/JSON_ALL_School",
                         {},
                         function (data) {
-                            self.setState({ schools: JSON.parse(data).Items });
-                        });
-
-        ajax.makeAjax("http://localhost:2175/Subject/JSON_ALL_Subject",
-                        {},
-                        function (data) {
-                            self.setState({ subjects: JSON.parse(data).Items });
+                            self.setState({
+                                schools: JSON.parse(data).Items,
+                                schoolId: JSON.parse(data).Items ? JSON.parse(data).Items[0].Id : null
+                            });
                         });
 
         this.saveData = this.saveData.bind(this);
@@ -34,7 +29,6 @@
 
         this.getRows = this.getRows.bind(this);
         this.initComboBox = this.initComboBox.bind(this);
-        this.initComboBoxSubjects = this.initComboBoxSubjects.bind(this);
         this.changeStatePopUP = this.changeStatePopUP.bind(this);
         this.updateDataOnPage = this.updateDataOnPage.bind(this);
 
@@ -72,7 +66,7 @@
                 });
             }
 
-            if (self.state.firstName === "") {
+            if (self.state.age === "") {
                 self.setState({
                     ageMess: 'Age is Empty!'
                 });
@@ -87,11 +81,10 @@
                             firstName: self.state.firstName,
                             lastName: self.state.lastName,
                             age: self.state.age,
-                            schoolId: self.state.schoolId,
-                            subjects: self.state.selected_subjects.join()
+                            schoolId: self.state.schoolId
                         },
                         function () {
-                            if (self.state.count % 10 != 0) {
+                            if (self.state.count % 10 != 0 || self.state.count == 0) {
                                 self.setState({
                                     count: self.state.count + 1
                                 });
@@ -136,7 +129,6 @@
             edit: student
         });
 
-        console.log(student ? student.Subjects : "");
 
         if (this.state.statePopUP === "invisible-pop-up") {
             this.setState({ statePopUP: "visible-pop-up" });
@@ -189,15 +181,9 @@
         );
     }
 
-    initComboBox(schools) {
-        return schools.map((school) =>
+    initComboBox() {
+        return this.state.schools.map((school) =>
             <option key={school.Id} value={school.Id}>{school.Name}</option>
-        );
-    }
-
-    initComboBoxSubjects(subjects) {
-        return subjects.map((subject) =>
-            <option key={subject.Id} value={subject.Id }>{subject.Title}</option>
         );
     }
 
@@ -251,19 +237,10 @@
                                 <label>
                                     School:
                                      <select onChange={this.changeSchool}>
-                                         {this.initComboBox(this.state.schools)}
+                                         {this.initComboBox()}
                                      </select>
                                 </label>
                              </div>
-                         </div>
-
-                         <div>
-                                <label>
-                                    Subjects:
-                                     <select multiple onChange={this.changeSubjects}>
-                                         {this.initComboBoxSubjects(this.state.subjects)}
-                                     </select>
-                                </label>
                          </div>
                     <hr />
                     <div>
