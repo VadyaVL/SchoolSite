@@ -1,4 +1,5 @@
 ﻿using SchoolSite.Domain.Core;
+using SchoolSite.Domain.DTO;
 using SchoolSite.Infrastructure.Business;
 using SchoolSite.Service;
 using SchoolSite.Services.Interfaces;
@@ -48,16 +49,16 @@ namespace SchoolSite.Controllers
 
             if (id == 0)
             {
-                School s = new School();
+                SchoolViewModel s = new SchoolViewModel();
                 s.Name = name;
 
                 schoolService.Save(s);
             }
             else
             {
-                School fSchool = null;
+                SchoolViewModel fSchool = null;
 
-                foreach (School sc in schoolService.GetAll())
+                foreach (SchoolViewModel sc in schoolService.GetAll())
                 {
                     if (sc.Id == id)
                     {
@@ -79,10 +80,10 @@ namespace SchoolSite.Controllers
         public ActionResult RemoveSchool(int id)
         {
             this.ControllerContext.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-            
-            School fSchool = null;
 
-            foreach(School sc in schoolService.GetAll())
+            SchoolViewModel fSchool = null;
+
+            foreach(SchoolViewModel sc in schoolService.GetAll())
             {
                 if(sc.Id == id)
                 {

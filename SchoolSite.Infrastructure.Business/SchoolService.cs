@@ -27,9 +27,11 @@ namespace SchoolSite.Infrastructure.Business
             uof.Save();
         }
 
-        public List<School> GetAll()
+        public List<SchoolViewModel> GetAll()
         {
-            return (List<School>) uof.Schools.GetAll();
+            Mapper.Initialize(cfg => cfg.CreateMap<School, SchoolViewModel>());
+            
+            return Mapper.Map<List<School>, List<SchoolViewModel>>(uof.Schools.GetAll().ToList());
         }
 
         public Feed<SchoolViewModel> GetSchoolFeed(int take)
@@ -40,22 +42,28 @@ namespace SchoolSite.Infrastructure.Business
             return new Feed<SchoolViewModel>(all);
         }
 
-        public Feed<School> GetSchoolFeed()
+        public Feed<SchoolViewModel> GetSchoolFeed()
         {
-            List<School> all = uof.Schools.GetAll().ToList();
-
-            return new Feed<School>(all);
+            Mapper.Initialize(cfg => cfg.CreateMap<School, SchoolViewModel>());
+            //uof.Schools.Query(x => x.Students).Selec(x => Mapper.Map<School, SchoolViewModel>).Tolist();
+            return new Feed<SchoolViewModel>(Mapper.Map<List<School>, List<SchoolViewModel>>(uof.Schools.GetAll().ToList()));
         }
 
-        public void Save(School item)
+        public void Save(SchoolViewModel item)
         {
-            uof.Schools.Create(item);
+            Mapper.Initialize(cfg => cfg.CreateMap<SchoolViewModel, School>());
+            School user = Mapper.Map<SchoolViewModel, School>(item);
+
+            uof.Schools.Create(user);
             uof.Save();
         }
 
-        public void Update(School item)
+        public void Update(SchoolViewModel item)
         {
-            uof.Schools.Update(item);
+            Mapper.Initialize(cfg => cfg.CreateMap<SchoolViewModel, School>());
+            School user = Mapper.Map<SchoolViewModel, School>(item);
+
+            uof.Schools.Update(user);
             uof.Save();
         }
     }

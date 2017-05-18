@@ -46,7 +46,7 @@ namespace SchoolSite.Controllers
             if (id == 0)
             {
                 Mark m = new Mark();
-                m.Student = studentService.Get(student_id);
+                m.Student = studentService.GetStudent(student_id);
                 m.Subject = subjectService.Get(subject_id);
                 m.Value = value;
 
@@ -67,7 +67,7 @@ namespace SchoolSite.Controllers
 
                 if (fMark != null)
                 {
-                    fMark.Student = studentService.Get(student_id);
+                    fMark.Student = studentService.GetStudent(student_id);
                     fMark.Subject = subjectService.Get(subject_id);
                     fMark.Value = value;
                     markService.Update(fMark);

@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Integration.Mvc;
+using AutoMapper;
 using SchoolSite.Domain.Core;
 using SchoolSite.Domain.Interfaces;
 using SchoolSite.Infrastructure.Business;
@@ -26,6 +27,7 @@ namespace SchoolSite.Util
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
 
             // регистрируем споставление типов
+            builder.RegisterType<Mapper>().As<IMapper>();
             builder.RegisterType<StudentService>().As<IStudentService>().SingleInstance();
             builder.RegisterType<MarkService>().As<IMarkService>().SingleInstance();
             builder.RegisterType<SubjectService>().As<ISubjectService>().SingleInstance();

@@ -158,7 +158,7 @@
         return (
             <div className="contentFromReact">
                 <div>
-                    <button className="btn-add" onClick={() => this.changeStatePopUP()}>Add School</button>
+                    <button className="btn-add" onClick={() => this.changeStatePopUP()}>Add Mark</button>
                 </div>
 
                <div className="div-table">

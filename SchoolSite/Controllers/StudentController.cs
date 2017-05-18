@@ -1,4 +1,7 @@
-﻿using SchoolSite.Domain.Core;
+﻿using AutoMapper;
+using SchoolSite.Domain.Core;
+using SchoolSite.Domain.Core.DTO;
+using SchoolSite.Domain.DTO;
 using SchoolSite.Infrastructure.Business;
 using SchoolSite.Services.Interfaces;
 using System;
@@ -46,12 +49,14 @@ namespace SchoolSite.Controllers
         public ActionResult PostStudent(int id, String firstName, String lastName, int age, int schoolId, string subjects)
         {
             this.ControllerContext.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+            int[] subs = new int[0];
 
-            var subs = subjects.Split(',').Select(x => Int32.Parse(x)).ToArray();
+            if (subjects != "")
+                subs = subjects.Split(',').Select(x => Int32.Parse(x)).ToArray();
 
             if (id == 0)
             {
-                Student s = new Student();
+                StudentCreateUpdateModel s = new StudentCreateUpdateModel();
                 s.FirstName = firstName;
                 s.LastName = lastName;
                 s.Age = age;
@@ -68,10 +73,13 @@ namespace SchoolSite.Controllers
             }
             else
             {
-                Student fStudent = studentService.GetAll().Find(i => i.Id == id);
+                //Mapper.Initialize(cfg => cfg.CreateMap<StudentViewModel, StudentCreateUpdateModel>());
+                //StudentCreateUpdateModel fStudent = Mapper.Map<StudentViewModel, StudentCreateUpdateModel>(studentService.GetAll().Find(i => i.Id == id));
+                StudentCreateUpdateModel fStudent = new StudentCreateUpdateModel();
 
                 if (fStudent != null)
                 {
+                    fStudent.Id = id;
                     fStudent.FirstName = firstName;
                     fStudent.LastName = lastName;
                     fStudent.Age = age;
@@ -84,8 +92,6 @@ namespace SchoolSite.Controllers
                     {
                         fStudent.Subjects.Add(subjectService.Get(i));
                     }
-
-
                 }
             }
             
@@ -96,7 +102,7 @@ namespace SchoolSite.Controllers
         {
             this.ControllerContext.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
 
-            Student fStudent = studentService.GetAll().Find(i => i.Id == id);
+            StudentViewModel fStudent = studentService.GetAll().Find(i => i.Id == id);
             
             if (fStudent != null)
             {

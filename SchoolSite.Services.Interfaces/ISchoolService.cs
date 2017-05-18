@@ -11,11 +11,11 @@ namespace SchoolSite.Services.Interfaces
 {
     public interface ISchoolService
     {
-        List<School> GetAll();
-        void Save(School item);
+        List<SchoolViewModel> GetAll();
+        void Save(SchoolViewModel item);
         void Delete(int id);
-        void Update(School item);
+        void Update(SchoolViewModel item);
         Feed<SchoolViewModel> GetSchoolFeed(int take);
-        Feed<School> GetSchoolFeed();
+        Feed<SchoolViewModel> GetSchoolFeed();
     }
 }

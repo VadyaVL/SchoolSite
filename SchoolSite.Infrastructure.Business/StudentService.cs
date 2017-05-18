@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using SchoolSite.Service;
 using AutoMapper;
 using SchoolSite.Domain.DTO;
+using SchoolSite.Domain.Core.DTO;
 
 namespace SchoolSite.Infrastructure.Business
 {
@@ -21,9 +22,11 @@ namespace SchoolSite.Infrastructure.Business
             uof = new UnitOfWork();
         }
         
-        public List<Student> GetAll()
+        public List<StudentViewModel> GetAll()
         {
-            return (List<Student>)uof.Students.GetAll();
+            Mapper.Initialize(cfg => cfg.CreateMap<Student, StudentViewModel>());
+
+            return Mapper.Map<List<Student>, List<StudentViewModel>>(uof.Students.GetAll().ToList());
         }
 
         public void Delete(int id)
@@ -32,15 +35,21 @@ namespace SchoolSite.Infrastructure.Business
             uof.Save();
         }
 
-        public void Save(Student item)
+        public void Save(StudentCreateUpdateModel item)
         {
-            uof.Students.Create(item);
+            Mapper.Initialize(cfg => cfg.CreateMap<StudentCreateUpdateModel, Student>());
+            Student student = Mapper.Map<StudentCreateUpdateModel, Student>(item);
+
+            uof.Students.Create(student);
             uof.Save();
         }
 
-        public void Update(Student item)
+        public void Update(StudentCreateUpdateModel item)
         {
-            uof.Students.Update(item);
+            Mapper.Initialize(cfg => cfg.CreateMap<StudentCreateUpdateModel, School>());
+            Student student = Mapper.Map<StudentCreateUpdateModel, Student>(item);
+
+            uof.Students.Update(student);
             uof.Save();
         }
 
@@ -52,14 +61,19 @@ namespace SchoolSite.Infrastructure.Business
             return new Feed<StudentViewModel>(users);
         }
 
-        public Feed<Student> GetStudentFeed()
+        public Feed<StudentViewModel> GetStudentFeed()
         {
-            List<Student> all = uof.Students.GetAll().ToList();
-
-            return new Feed<Student>(all);
+            Mapper.Initialize(cfg => cfg.CreateMap<Student, StudentViewModel>());
+            return new Feed<StudentViewModel>(Mapper.Map<List<Student>, List<StudentViewModel>>(uof.Students.GetAll().ToList()));
         }
 
-        public Student Get(int id)
+        public StudentViewModel Get(int id)
+        {
+            Mapper.Initialize(cfg => cfg.CreateMap<Student, StudentViewModel>());
+            return Mapper.Map<Student, StudentViewModel>(uof.Students.GetById(id));
+        }
+
+        public Student GetStudent(int id)
         {
             return uof.Students.GetById(id);
         }

@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="DTO\MarkViewModel.cs" />
     <Compile Include="DTO\SchoolViewModel.cs" />
+    <Compile Include="DTO\StudentCreateUpdateModel.cs" />
     <Compile Include="DTO\StudentViewModel.cs" />
     <Compile Include="DTO\SubjectViewModel.cs" />
     <Compile Include="Mark.cs" />

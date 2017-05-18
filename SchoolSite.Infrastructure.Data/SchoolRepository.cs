@@ -14,6 +14,11 @@ namespace SchoolSite.Infrastructure.Data
         private SchoolDBContext db;
         private bool disposed = false;
 
+
+        //public void Query(includes)
+        //{
+
+        //}
         public SchoolRepository(SchoolDBContext db)
         {
             this.db = db;
@@ -66,7 +71,10 @@ namespace SchoolSite.Infrastructure.Data
 
         public void Update(School item)
         {
-            db.Entry(item).State = EntityState.Modified;
+            //db.Entry(item).State = EntityState.Modified;
+            var school = db.Schools.Find(item.Id);
+            db.Schools.Remove(school);
+            db.Schools.Add(item);
         }
     }
 }
