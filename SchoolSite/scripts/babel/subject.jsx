@@ -1,14 +1,14 @@
 ﻿class SubjectData extends React.Component {
     constructor(props) {
         super(props);
-        
+
         this.state = {
             data: [],
             title: '',
             statePopUP: "invisible-pop-up",
             titleMess: ''
         };
-        
+
         this.saveData = this.saveData.bind(this);
         this.removeData = this.removeData.bind(this);
 
@@ -35,7 +35,7 @@
             return;
         }
 
-        ajax.makeAjax(  "http://localhost:2175/Subject/PostSubject",
+        ajax.makeAjax("http://localhost:2175/Subject/PostSubject",
                         {
                             id: self.state.edit ? self.state.edit.Id : 0,
                             title: self.state.title
@@ -56,7 +56,7 @@
         console.log(toLoad);
         ajax.makeAjax("http://localhost:2175/Subject/JSON_Subject",
                         {
-                            get: Boolean(toLoad),
+    get: Boolean(toLoad),
                             count: self.state.count
                         },
                         function (data) {
@@ -98,52 +98,52 @@
     getRows(subjects) {
         return subjects.map((subject) =>
             <div className="div-row" key={subject.Id}>
-                <div className="div-col">{subject.Id}</div>
+                <div className="div-col-num">{subject.Id}</div>
                 <div className="div-col">{subject.Title}</div>
-                <div className="div-col"><button className="btn-edit" onClick={() => this.changeStatePopUP(subject)}>Edit</button></div>
-                <div className="div-col"><button className="btn-remove" onClick={() => this.removeData(subject)}>Remove</button></div>
+                <div className="div-col-btn"><button className="btn-edit" onClick={() => this.changeStatePopUP(subject)}>Edit</button></div>
+                <div className="div-col-btn"><button className="btn-remove" onClick={() => this.removeData(subject)}>Remove</button></div>
             </div>
         );
-                }
-        
+    }
+
     render() {
         return (
             <div className="contentFromReact">
                 <div>
                     <button className="btn-add" onClick={() => this.changeStatePopUP()}>Add Subject</button>
-                </div><br />
+                </div>
                <div className="div-table">
                     <div className="div-row-head">
-                        <div className="div-col">ID</div>
+                        <div className="div-col-num">ID</div>
                         <div className="div-col">Title</div>
-                        <div className="div-col"></div>
-                        <div className="div-col"></div>
+                        <div className="div-col-btn"></div>
+                        <div className="div-col-btn"></div>
                     </div>
-                    {this.getRows(this.state.data)}
-        </div>
+                   {this.getRows(this.state.data)}
+               </div>
 
             <div>
                 <button className="btn-add" onClick={() => this.updateDataOnPage(true)}>See more</button>
-            </div><br />
+            </div>
 
          <div className={this.state.statePopUP}>
                  <form className="input-form">
                      <div>
                          <label>
-                            Title:
+                             Title:
                                     <input type="text" onChange={this.changeInputTitle} value={this.state.title} placeholder="Enter the subject title..." />
-                                </label>
+                         </label>
                                 <p className="errorMess">{this.state.titleMess}</p>
-                            </div><hr />
+                     </div><hr />
                             <div>
-                                <button type="button" className="btn-save"      onClick={() => this.saveData()}>Save</button>
-                                <button type="button" className="btn-cancel"    onClick={() => this.changeStatePopUP()}>Cancel</button>
+                                <button type="button" className="btn-save" onClick={() => this.saveData()}>Save</button>
+                                <button type="button" className="btn-cancel" onClick={() => this.changeStatePopUP()}>Cancel</button>
                             </div>
-                    </form>
-                </div>
+                 </form>
+         </div>
             </div>
         );
     }
 }
 
-ReactDOM.render(<SubjectData />, document.getElementById("data"));
+ReactDOM.render(<SubjectData />, document.getElementById("content"));

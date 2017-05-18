@@ -2,13 +2,21 @@
 using Autofac.Integration.Mvc;
 using SchoolSite.Domain.Core;
 using SchoolSite.Domain.Interfaces;
+using SchoolSite.Infrastructure.Business;
 using SchoolSite.Infrastructure.Data;
+using SchoolSite.Services.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 
 namespace SchoolSite.Util
 {
     public class AutofacConfig
     {
+        public static IContainer Container { get; private set; }
+
         public static void ConfigureContainer()
         {
             // получаем экземпляр контейнера
@@ -18,16 +26,16 @@ namespace SchoolSite.Util
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
 
             // регистрируем споставление типов
-            builder.RegisterType<StudentRepository>().As<IRepository<Student>>().WithParameter("db", SchoolDBContext.GetInstance());
-            builder.RegisterType<MarkRepository>().As<IRepository<Mark>>().WithParameter("db", SchoolDBContext.GetInstance());
-            builder.RegisterType<SubjectRepository>().As<IRepository<Subject>>().WithParameter("db", SchoolDBContext.GetInstance());
-            builder.RegisterType<SchoolRepository>().As<IRepository<School>>().WithParameter("db", SchoolDBContext.GetInstance());
+            builder.RegisterType<StudentService>().As<IStudentService>().SingleInstance();
+            builder.RegisterType<MarkService>().As<IMarkService>().SingleInstance();
+            builder.RegisterType<SubjectService>().As<ISubjectService>().SingleInstance();
+            builder.RegisterType<SchoolService>().As<ISchoolService>().SingleInstance();
 
             // создаем новый контейнер с теми зависимостями, которые определены выше
-            var container = builder.Build();
+            Container = builder.Build();
 
             // установка сопоставителя зависимостей
-            DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
+            DependencyResolver.SetResolver(new AutofacDependencyResolver(Container));
         }
     }
 }

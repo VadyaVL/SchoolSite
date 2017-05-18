@@ -21,7 +21,7 @@ namespace SchoolSite.Infrastructure.Data
             get
             {
                 if (markRepository == null)
-                    markRepository = new MarkRepository();
+                    markRepository = new MarkRepository(db);
                 return markRepository;
             }
         }
@@ -31,7 +31,7 @@ namespace SchoolSite.Infrastructure.Data
             get
             {
                 if (studentRepository == null)
-                    studentRepository = new StudentRepository();
+                    studentRepository = new StudentRepository(db);
                 return studentRepository;
             }
         }
@@ -41,7 +41,7 @@ namespace SchoolSite.Infrastructure.Data
             get
             {
                 if (schoolRepository == null)
-                    schoolRepository = new SchoolRepository();
+                    schoolRepository = new SchoolRepository(db);
                 return schoolRepository;
             }
         }
@@ -51,7 +51,7 @@ namespace SchoolSite.Infrastructure.Data
             get
             {
                 if (subjectRepository == null)
-                    subjectRepository = new SubjectRepository();
+                    subjectRepository = new SubjectRepository(db);
                 return subjectRepository;
             }
         }

@@ -15,9 +15,9 @@ namespace SchoolSite.Controllers
     {
         private ISchoolService schoolService;
 
-        public SchoolController() : base()
+        public SchoolController(ISchoolService ss) : base()
         {
-            schoolService = new SchoolService();
+            schoolService = ss;
         }
 
         public ActionResult Index()

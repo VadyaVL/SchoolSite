@@ -1,7 +1,7 @@
 ﻿class StudentData extends React.Component {
     constructor(props) {
         super(props);
-        
+
         this.state = {
             data: [],
             schools: [],
@@ -43,7 +43,7 @@
         this.changeAge = this.changeAge.bind(this);
         this.changeSchool = this.changeSchool.bind(this);
         this.changeSubjects = this.changeSubjects.bind(this);
-        
+
         this.updateDataOnPage(true);
     }
 
@@ -81,7 +81,7 @@
             return;
         }
 
-        ajax.makeAjax(  "http://localhost:2175/Student/PostStudent",
+        ajax.makeAjax("http://localhost:2175/Student/PostStudent",
                         {
                             id: self.state.edit ? self.state.edit.Id : 0,
                             firstName: self.state.firstName,
@@ -105,7 +105,7 @@
         self = this;
         ajax.makeAjax("http://localhost:2175/Student/JSON_Student",
                         {
-                            get: Boolean(toLoad),
+    get: Boolean(toLoad),
                             count: self.state.count
                         },
                         function (data) {
@@ -172,19 +172,19 @@
             }
         }
 
-        this.setState({ selected_subjects: value});
+        this.setState({ selected_subjects: value });
     }
 
     getRows(students) {
         return students.map((student) =>
             <div className="div-row" key={student.Id}>
-                <div className="div-col">{student.Id}</div>
+                <div className="div-col-num">{student.Id}</div>
                 <div className="div-col">{student.FirstName}</div>
                 <div className="div-col">{student.LastName}</div>
-                <div className="div-col">{student.Age}</div>
+                <div className="div-col-num">{student.Age}</div>
                 <div className="div-col">{student.School.Name}</div>
-                <div className="div-col"><button className="btn-edit" onClick={() => this.changeStatePopUP(student)}>Edit</button></div>
-                <div className="div-col"><button className="btn-remove" onClick={() => this.removeData(student)}>Remove</button></div>
+                <div className="div-col-btn"><button className="btn-edit" onClick={() => this.changeStatePopUP(student)}>Edit</button></div>
+                <div className="div-col-btn"><button className="btn-remove" onClick={() => this.removeData(student)}>Remove</button></div>
             </div>
         );
     }
@@ -206,24 +206,22 @@
             <div className="contentFromReact">
                 <div>
                     <button className="btn-add" onClick={() => this.changeStatePopUP()}>Add Student</button>
-                </div><br />
+                </div>
                <div className="div-table">
                     <div className="div-row-head">
-                        <div className="div-col">ID</div>
+                        <div className="div-col-num">ID</div>
                         <div className="div-col">First Name</div>
                         <div className="div-col">Last Name</div>
-                        <div className="div-col">Age</div>
+                        <div className="div-col-num">Age</div>
                         <div className="div-col">School</div>
-                        <div className="div-col"></div>
-                        <div className="div-col"></div>
+                        <div className="div-col-btn"></div>
+                        <div className="div-col-btn"></div>
                     </div>
-                    {this.getRows(this.state.data)}
-        </div>
-
-
+                   {this.getRows(this.state.data)}
+               </div>
         <div>
             <button className="btn-add" onClick={() => this.updateDataOnPage(true)}>See more</button>
-        </div><br />
+        </div>
 
          <div className={this.state.statePopUP}>
                  <form className="input-form">
@@ -246,7 +244,7 @@
                                 <label>
                                     Age:
                                     <input type="number" onChange={this.changeAge} value={this.state.age} placeholder="Age..." />
-                                </label>                        
+                                </label>
                                  <p className="errorMess">{this.state.ageMess}</p>
                              </div>
                              <div>
@@ -257,12 +255,13 @@
                                      </select>
                                 </label>
                              </div>
-                        </div>
+                         </div>
 
                          <div>
                                 <label>
                                     Subjects:
-                                     <select multiple onChange={this.changeSubjects}>{this.initComboBoxSubjects(this.state.subjects)}
+                                     <select multiple onChange={this.changeSubjects}>
+                                         {this.initComboBoxSubjects(this.state.subjects)}
                                      </select>
                                 </label>
                          </div>
@@ -271,11 +270,11 @@
                         <button type="button" className="btn-save" onClick={() => this.saveData()}>Save</button>
                         <button type="button" className="btn-cancel" onClick={() => this.changeStatePopUP()}>Cancel</button>
                     </div>
-</form>
-                </div>
+                 </form>
+         </div>
             </div>
         );
     }
 }
 
-ReactDOM.render(<StudentData />, document.getElementById("data"));
+ReactDOM.render(<StudentData />, document.getElementById("content"));

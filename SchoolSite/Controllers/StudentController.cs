@@ -14,10 +14,10 @@ namespace SchoolSite.Controllers
         private IStudentService studentService;
         private ISubjectService subjectService;
 
-        public StudentController() : base()
+        public StudentController(IStudentService stS, ISubjectService suS) : base()
         {
-            studentService = new StudentService();
-            subjectService = new SubjectService();
+            studentService = stS;
+            subjectService = suS;
         }
 
         // GET: Student

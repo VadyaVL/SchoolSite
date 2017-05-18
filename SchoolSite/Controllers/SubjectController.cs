@@ -13,9 +13,9 @@ namespace SchoolSite.Controllers
     {
         private ISubjectService subjectService;
 
-        public SubjectController() : base()
+        public SubjectController(ISubjectService ss) : base()
         {
-            subjectService = new SubjectService();
+            subjectService = ss;
         }
         // GET: Subject
         public ActionResult Index()

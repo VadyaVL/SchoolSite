@@ -81,7 +81,7 @@
         self = this;
         ajax.makeAjax("http://localhost:2175/Mark/JSON_Mark",
                         {
-                            get: Boolean(toLoad),
+    get: Boolean(toLoad),
                             count: self.state.count
                         },
                         function (data) {
@@ -131,22 +131,22 @@
     getRows(marks) {
         return marks.map((mark) =>
             <div className="div-row" key={mark.Id}>
-                <div className="div-col">{mark.Id}</div>
+                <div className="div-col-num">{mark.Id}</div>
                 <div className="div-col">{mark.Student.FirstName}</div>
                 <div className="div-col">{mark.Subject.Title}</div>
-                <div className="div-col">{mark.Value}</div>
-                <div className="div-col"><button className="btn-edit" onClick={() => this.changeStatePopUP(mark)}>Edit</button></div>
-                <div className="div-col"><button className="btn-remove" onClick={() => this.removeData(mark)}>Remove</button></div>
+                <div className="div-col-num">{mark.Value}</div>
+                <div className="div-col-btn"><button className="btn-edit" onClick={() => this.changeStatePopUP(mark)}>Edit</button></div>
+                <div className="div-col-btn"><button className="btn-remove" onClick={() => this.removeData(mark)}>Remove</button></div>
             </div>
         );
     }
-    
+
     initComboBoxSubject(subjects) {
         return subjects.map((subject) =>
             <option key={subject.Id} value={subject.Id }>{subject.Title}</option>
         );
     }
-    
+
     initComboBoxStudent(students) {
         return students.map((student) =>
             <option key={student.Id} value={student.Id }>{student.FirstName + " " + student.LastName}</option>
@@ -159,22 +159,23 @@
             <div className="contentFromReact">
                 <div>
                     <button className="btn-add" onClick={() => this.changeStatePopUP()}>Add School</button>
-                </div><br />
+                </div>
+
                <div className="div-table">
                     <div className="div-row-head">
-                        <div className="div-col">ID</div>
+                        <div className="div-col-num">ID</div>
                         <div className="div-col">Student</div>
                         <div className="div-col">Subject</div>
-                        <div className="div-col">Mark</div>
-                        <div className="div-col"></div>
-                        <div className="div-col"></div>
+                        <div className="div-col-num">Mark</div>
+                        <div className="div-col-btn"></div>
+                        <div className="div-col-btn"></div>
                     </div>
                    {this.getRows(this.state.data)}
-               </div><br />
+               </div>
 
          <div>
              <button className="btn-add" onClick={() => this.updateDataOnPage(true)}>See more</button>
-         </div><br />
+         </div>
 
          <div className={this.state.statePopUP}>
                  <form className="input-form">
@@ -214,4 +215,4 @@
     }
 }
 
-ReactDOM.render(<MarkData />, document.getElementById("data"));
+ReactDOM.render(<MarkData />, document.getElementById("content"));

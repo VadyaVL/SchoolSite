@@ -16,11 +16,11 @@ namespace SchoolSite.Controllers
         private IStudentService studentService;
         private ISubjectService subjectService;
 
-        public MarkController() : base()
+        public MarkController(IMarkService ms, IStudentService stS, ISubjectService suS) : base()
         {
-            markService = new MarkService();
-            studentService = new StudentService();
-            subjectService = new SubjectService();
+            markService = ms;
+            studentService = stS;
+            subjectService = suS;
         }
 
         // GET: Mark
