@@ -1,6 +1,6 @@
 ﻿var ajax = {
 
-    makeAjax(url, data, success) {
+    callAjax(url, data, success) {//call
         $.post({
             url: url,
             type: "POST",

@@ -15,12 +15,12 @@ namespace SchoolSite.Infrastructure.Business
 {
     public class MarkService : IMarkService
     {
-        private UnitOfWork uof;
+        private UnitOfWork unitOfWork;
         private IMapper mapp;
 
-        public MarkService(UnitOfWork uof, Mapper mapper)
+        public MarkService(UnitOfWork unitOfWork, Mapper mapper)
         {
-            this.uof = uof;
+            this.unitOfWork = unitOfWork;
             mapp = mapper;
         }
 
@@ -28,20 +28,20 @@ namespace SchoolSite.Infrastructure.Business
         {
             if (this.GetAll().Find(i => i.Id == id) != null)
             {
-                uof.Marks.Delete(id);
-                uof.Save();
+                unitOfWork.Marks.Delete(id);
+                unitOfWork.Save();
             }
         }
 
         public List<MarkViewModel> GetAll()
         {
-            var res = uof.Marks.Query().ToList().Select(x => mapp.Map<MarkViewModel>(x)).ToList();
+            var res = unitOfWork.Marks.Query().ToList().Select(x => mapp.Map<MarkViewModel>(x)).ToList();
             return res;
         }
 
         public Feed<MarkViewModel> GetMarkFeed(int take)
         {
-            var res = uof.Marks.Query().ToList().Select(x => mapp.Map<MarkViewModel>(x)).Take(take).ToList();
+            var res = unitOfWork.Marks.Query().ToList().Select(x => mapp.Map<MarkViewModel>(x)).Take(take).ToList();
             return new Feed<MarkViewModel>(res);
         }
 
@@ -55,8 +55,8 @@ namespace SchoolSite.Infrastructure.Business
             if (item.Id == 0)
             {
                 Mark mark = mapp.Map<Mark>(item);
-                uof.Marks.Create(mark);
-                uof.Save();
+                unitOfWork.Marks.Create(mark);
+                unitOfWork.Save();
             }
             else
             {
@@ -69,8 +69,8 @@ namespace SchoolSite.Infrastructure.Business
             if (this.GetAll().Find(i => i.Id == item.Id) != null)
             {
                 Mark mark = mapp.Map<Mark>(item);
-                uof.Marks.Update(mark);
-                uof.Save();
+                unitOfWork.Marks.Update(mark);
+                unitOfWork.Save();
             }
         }
     }

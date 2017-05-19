@@ -6,13 +6,13 @@ namespace SchoolSite.Controllers
 {
     public class StudentController : Controller
     {
-        private IStudentService studentService;
+        private IStudentService studentService;//upper case
         private ISubjectService subjectService;
 
-        public StudentController(IStudentService stS, ISubjectService suS) : base()
+        public StudentController(IStudentService studentService, ISubjectService subjectService) : base()//lowcase
         {
-            studentService = stS;
-            subjectService = suS;
+            this.studentService = studentService;
+            this.subjectService = subjectService;
         }
 
         // GET: Student

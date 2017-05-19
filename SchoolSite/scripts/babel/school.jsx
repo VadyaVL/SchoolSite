@@ -14,14 +14,16 @@
         this.saveData = this.saveData.bind(this);
         this.removeData = this.removeData.bind(this);
 
+
         this.getRows = this.getRows.bind(this);
+
 
         this.changePopUpState = this.changePopUpState.bind(this);
         this.updateDataOnPage = this.updateDataOnPage.bind(this);
 
         this.changeInputName = this.changeInputName.bind(this);
 
-        this.updateDataOnPage(true);
+        this.updateDataOnPage(0);
     }
 
     saveData() {
@@ -39,7 +41,7 @@
             return;
         }
 
-        ajax.makeAjax('/School/PostSchool',
+        ajax.callAjax('/School/PostSchool',
                         {
                             Id: self.state.edit ? self.state.edit.Id : 0,
                             Name: self.state.name
@@ -50,30 +52,38 @@
                                     count: self.state.count + 1
                                 });
                             }
-                            self.updateDataOnPage();
+                            self.updateDataOnPage(0);
                             self.changePopUpState();
                         });
     }
 
-    updateDataOnPage(toLoad) {
+    updateDataOnPage() {
         self = this;
-        ajax.makeAjax('/School/JSON_School',
+        var skip = this.state.count;
+        ajax.callAjax('/School/JSON_School',
                         {
-                            get: Boolean(toLoad),
-                            count: self.state.count
+                            skip: skip,
                         },
                         function (data) {
                             var jsonObj = JSON.parse(data);
+                            var t = [];
+                            if (skip == 0) {
+                                var t = jsonObj.Items;
+                            }
+                            else {
+                                var t = self.state.data.concat(jsonObj.Items);
+                            }
+
                             self.setState({
                                 count: jsonObj.Count,
-                                data: jsonObj.Items
+                                data: t
                             });
                         });
     }
 
     removeData(school) {
         self = this;
-        ajax.makeAjax('/School/RemoveSchool',
+        ajax.callAjax('/School/RemoveSchool',
                         {
                             id: school.Id
                         },
@@ -99,16 +109,18 @@
 
     getRows(schools) {
         return schools.map((school) =>
-            <div className='div-row' key={school.Id}>
-                <div className='div-col-num'>{school.Id}</div>
-                <div className='div-col'>{school.Name}</div>
-                <div className='div-col-btn'><button className='btn-edit' onClick={() => this.changePopUpState(school)}>Edit</button></div>
-                <div className='div-col-btn'><button className='btn-remove' onClick={() => this.removeData(school)}>Remove</button></div>
+                        <div className='div-row' key={school.Id}>
+                        <div className='div-col-num'>{school.Id}</div>
+                        <div className='div-col'>{school.Name}</div>
+                        <div className='div-col-btn'><button className='btn-edit' onClick={() => this.changePopUpState(school)}>Edit</button></div>
+                        <div className='div-col-btn'><button className='btn-remove' onClick={() => this.removeData(school)}>Remove</button></div>
             </div>
         );
     }
 
     render() {
+        self = this;
+       
         return (
             <div className='contentFromReact'>
                 <div>
@@ -126,10 +138,10 @@
                </div>
 
                 <div>
-                    <button className='btn-add' onClick={() => this.updateDataOnPage(true)}>See more</button>
+                    <button className='btn-more' onClick={() => this.updateDataOnPage()}>See more</button>
                 </div>
-
-                <div className={this.state.popupParentClassName}>
+                
+                <div className={this.state.popupParentClassName}>{/*class* {this.STARTE.OPENEDPOPUP ? */}
                     <div className={this.state.popupClassName}>
                             <form className='input-form'>
                                 <div>
@@ -145,7 +157,7 @@
                                 </div>
                             </form>
                     </div>
-                </div>
+                </div> 
             </div>
         );
     }

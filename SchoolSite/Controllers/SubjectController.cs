@@ -8,9 +8,9 @@ namespace SchoolSite.Controllers
     {
         private ISubjectService subjectService;
 
-        public SubjectController(ISubjectService ss) : base()
+        public SubjectController(ISubjectService subjectService) : base()
         {
-            subjectService = ss;
+            this.subjectService = subjectService;
         }
 
         public ActionResult Index()

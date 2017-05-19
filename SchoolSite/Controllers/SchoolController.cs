@@ -8,9 +8,9 @@ namespace SchoolSite.Controllers
     {
         private ISchoolService schoolService;
 
-        public SchoolController(ISchoolService ss) : base()
+        public SchoolController(ISchoolService schoolService) : base()
         {
-            schoolService = ss;
+            this.schoolService = schoolService;
         }
 
         public ActionResult Index()
@@ -18,17 +18,17 @@ namespace SchoolSite.Controllers
             return View("school");
         }
 
-        public ActionResult JSON_ALL_School()
+        public ActionResult JSON_ALL_School()//GetSchoolOptions
         {
-            return Json(schoolService.GetSchoolFeed(), JsonRequestBehavior.AllowGet);
+            var res = schoolService.GetSchoolFeed();
+            return Json(res, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult JSON_School(bool get = false, int count = 0)
+        // Get 
+        public ActionResult JSON_School(int skip)//GetSchool
         {
-            if(get)
-                return Json(schoolService.GetSchoolFeed(count + 10), JsonRequestBehavior.AllowGet);
-            else
-                return Json(schoolService.GetSchoolFeed(count), JsonRequestBehavior.AllowGet);
+            var res = schoolService.GetSchoolFeed(skip, 10);
+            return Json(res, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult PostSchool(SchoolViewModel dto)

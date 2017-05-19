@@ -15,18 +15,18 @@ namespace SchoolSite.Infrastructure.Business
 {
     public class StudentService : IStudentService
     {
-        private UnitOfWork uof;
+        private UnitOfWork unitOfWork;
         private IMapper mapp;
 
-        public StudentService(UnitOfWork uof, Mapper mapper)
+        public StudentService(UnitOfWork unitOfWork, Mapper mapper)
         {
-            this.uof = uof;
+            this.unitOfWork = unitOfWork;
             mapp = mapper;
         }
 
         public List<StudentViewModel> GetAll()
         {
-            var res = uof.Students.Query().ToList().Select(x => mapp.Map<StudentViewModel>(x)).ToList();
+            var res = unitOfWork.Students.Query().ToList().Select(x => mapp.Map<StudentViewModel>(x)).ToList();
             return res;
         }
 
@@ -34,8 +34,8 @@ namespace SchoolSite.Infrastructure.Business
         {
             if (this.GetAll().Find(i => i.Id == id) != null)
             {
-                uof.Students.Delete(id);
-                uof.Save();
+                unitOfWork.Students.Delete(id);
+                unitOfWork.Save();
             }
         }
 
@@ -44,8 +44,8 @@ namespace SchoolSite.Infrastructure.Business
             if (item.Id == 0)
             {
                 Student student = mapp.Map<StudentCreateUpdateModel, Student>(item);
-                uof.Students.Create(student);
-                uof.Save();
+                unitOfWork.Students.Create(student);
+                unitOfWork.Save();
             }
             else
             {
@@ -58,14 +58,14 @@ namespace SchoolSite.Infrastructure.Business
             if (this.GetAll().Find(i => i.Id == item.Id) != null)
             {
                 Student student = mapp.Map<StudentCreateUpdateModel, Student>(item);
-                uof.Students.Update(student);
-                uof.Save();
+                unitOfWork.Students.Update(student);
+                unitOfWork.Save();
             }
         }
 
         public Feed<StudentViewModel> GetStudentFeed(int take)
         {
-            var res = uof.Students.Query().ToList().Select(x => mapp.Map<StudentViewModel>(x)).Take(take).ToList();
+            var res = unitOfWork.Students.Query().ToList().Select(x => mapp.Map<StudentViewModel>(x)).Take(take).ToList();
             return new Feed<StudentViewModel>(res);
         }
 
@@ -76,12 +76,12 @@ namespace SchoolSite.Infrastructure.Business
 
         public StudentViewModel Get(int id)
         {
-            return mapp.Map<Student, StudentViewModel>(uof.Students.GetById(id));
+            return mapp.Map<Student, StudentViewModel>(unitOfWork.Students.GetById(id));
         }
 
         public Student GetStudent(int id)
         {
-            return uof.Students.GetById(id);
+            return unitOfWork.Students.GetById(id);
         }
     }
 }

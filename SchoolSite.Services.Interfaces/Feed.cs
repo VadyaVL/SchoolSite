@@ -12,10 +12,15 @@ namespace SchoolSite.Service
         public int Count { get; set; }
         public List<T> Items { get; set; }
         
-
         public Feed(List<T> list)
         {
             Count = list.Count;
+            this.Items = list;
+        }
+
+        public Feed(List<T> list, int skip)
+        {
+            Count = skip + list.Count;
             this.Items = list;
         }
     }

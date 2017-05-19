@@ -15,7 +15,7 @@ namespace SchoolSite.Services.Interfaces
         void Save(SchoolViewModel item);
         void Delete(int id);
         void Update(SchoolViewModel item);
-        Feed<SchoolViewModel> GetSchoolFeed(int take);
+        Feed<SchoolViewModel> GetSchoolFeed(int skip, int take);
         Feed<SchoolViewModel> GetSchoolFeed();
     }
 }

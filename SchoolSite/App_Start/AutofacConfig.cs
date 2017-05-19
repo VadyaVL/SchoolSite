@@ -31,22 +31,22 @@ namespace SchoolSite.Util
             builder.RegisterType<Mapper>().As<IMapper>().SingleInstance();
             builder.RegisterType<StudentService>().As<IStudentService>().SingleInstance().WithParameters(
                 new List<Parameter> {
-                    new NamedParameter("uof", new UnitOfWork()),
+                    new NamedParameter("unitOfWork", new UnitOfWork()),
                     new NamedParameter("mapper", Mapper.Configuration.CreateMapper())
                 });
             builder.RegisterType<MarkService>().As<IMarkService>().SingleInstance().WithParameters(
                 new List<Parameter> {
-                    new NamedParameter("uof", new UnitOfWork()),
+                    new NamedParameter("unitOfWork", new UnitOfWork()),
                     new NamedParameter("mapper", Mapper.Configuration.CreateMapper())
                 });
             builder.RegisterType<SubjectService>().As<ISubjectService>().SingleInstance().WithParameters(
                 new List<Parameter> {
-                    new NamedParameter("uof", new UnitOfWork()),
+                    new NamedParameter("unitOfWork", new UnitOfWork()),
                     new NamedParameter("mapper", Mapper.Configuration.CreateMapper())
                 });
             builder.RegisterType<SchoolService>().As<ISchoolService>().SingleInstance().WithParameters(
                 new List<Parameter> {
-                    new NamedParameter("uof", new UnitOfWork()),
+                    new NamedParameter("unitOfWork", new UnitOfWork()),
                     new NamedParameter("mapper", Mapper.Configuration.CreateMapper())
                 });
 

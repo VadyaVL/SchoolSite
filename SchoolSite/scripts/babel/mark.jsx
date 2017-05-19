@@ -15,7 +15,7 @@
             popupParentClassName: ''
         };
 
-        ajax.makeAjax('/Student/JSON_ALL_Student', {},
+        ajax.callAjax('/Student/JSON_ALL_Student', {},
                         function (data) {
                             self.setState({
                                 students: JSON.parse(data).Items,
@@ -23,7 +23,7 @@
                             });
                         });
 
-        ajax.makeAjax('/Subject/JSON_ALL_Subject', {},
+        ajax.callAjax('/Subject/JSON_ALL_Subject', {},
                         function (data) {
                             self.setState({
                                 subjects: JSON.parse(data).Items,
@@ -68,7 +68,7 @@
             return;
         }
 
-        ajax.makeAjax('/Mark/PostMark',
+        ajax.callAjax('/Mark/PostMark',
                         {
                             Id: self.state.edit ? self.state.edit.Id : 0,
                             StudentId: self.state.student,
@@ -88,7 +88,7 @@
 
     updateDataOnPage(toLoad) {
         self = this;
-        ajax.makeAjax('/Mark/JSON_Mark',
+        ajax.callAjax('/Mark/JSON_Mark',
                         {
                             get: Boolean(toLoad),
                             count: self.state.count
@@ -104,7 +104,7 @@
 
     removeData(mark) {
         self = this;
-        ajax.makeAjax('/Mark/RemoveMark',
+        ajax.callAjax('/Mark/RemoveMark',
                         {
                             id: mark.Id
                         },
@@ -193,7 +193,7 @@
             </div>
 
             <div>
-                <button className='btn-add' onClick={() => this.updateDataOnPage(true)}>See more</button>
+                <button className='btn-add ' onClick={() => this.updateDataOnPage(true)}>See more</button>
             </div>
 
             <div className={this.state.popupParentClassName}>

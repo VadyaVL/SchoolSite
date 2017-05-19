@@ -16,7 +16,7 @@
             parentPopUp: ''
         };
 
-        ajax.makeAjax('/School/JSON_ALL_School',
+        ajax.callAjax('/School/JSON_ALL_School',
                         {},
                         function (data) {
                             self.setState({
@@ -76,7 +76,7 @@
             return;
         }
 
-        ajax.makeAjax('/Student/PostStudent',
+        ajax.callAjax('/Student/PostStudent',
                         {
                             Id: self.state.edit ? self.state.edit.Id : 0,
                             FirstName: self.state.firstName,
@@ -97,7 +97,7 @@
 
     updateDataOnPage(toLoad) {
         self = this;
-        ajax.makeAjax('/Student/JSON_Student',
+        ajax.callAjax('/Student/JSON_Student',
                         {
                             get: Boolean(toLoad),
                             count: self.state.count
@@ -113,7 +113,7 @@
 
     removeData(student) {
         self = this;
-        ajax.makeAjax('/Student/RemoveStudent',
+        ajax.callAjax('/Student/RemoveStudent',
                         {
                             id: student.Id
                         },

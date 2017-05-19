@@ -1,9 +1,11 @@
-﻿using SchoolSite.Util;
+﻿using SchoolSite.App_Start;
+using SchoolSite.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Optimization;
 using System.Web.Routing;
 
 namespace SchoolSite
@@ -14,7 +16,7 @@ namespace SchoolSite
         {
             MapperConfig.ConfigureMapper();
             AutofacConfig.ConfigureContainer();
-
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
         }

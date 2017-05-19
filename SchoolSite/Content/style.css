@@ -1,7 +1,7 @@
 ﻿/*Basic structure*/
 .container {
-    margin-left: 5%;
-    margin-right: 5%;
+    margin: auto;
+    width: 1000px;
 }
 
 .header {
@@ -62,11 +62,11 @@
 }
 
 /*Buttons*/
-.btn-add, .btn-save {
+.btn-add, .btn-save, .btn-more {
     background-color: forestgreen;
 }
 
-.btn-add {
+.btn-add, .btn-more {
     margin-top: 5px;
     margin-bottom: 5px;
 }
@@ -87,7 +87,7 @@
     float: right;
 }
 
-.btn-add, .btn-save, .btn-remove, .btn-edit, btn-cancel {
+.btn-add, .btn-save, .btn-remove, .btn-edit, btn-cancel, .btn-more {
     min-width: 70px;
     padding: 5px;
     font-size: 14px;
@@ -96,6 +96,10 @@
     text-align: center;
     text-decoration: none;
     display: inline-block;
+}
+
+.btn-more {
+    right:0px;
 }
 
 /*PopUP*/

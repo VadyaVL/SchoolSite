@@ -10,11 +10,11 @@ namespace SchoolSite.Controllers
         private IStudentService studentService;
         private ISubjectService subjectService;
 
-        public MarkController(IMarkService ms, IStudentService stS, ISubjectService suS) : base()
+        public MarkController(IMarkService markService, IStudentService studentService, ISubjectService subjectService) : base()
         {
-            markService = ms;
-            studentService = stS;
-            subjectService = suS;
+            this.markService = markService;
+            this.studentService = studentService;
+            this.subjectService = subjectService;
         }
 
 

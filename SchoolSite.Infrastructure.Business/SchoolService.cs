@@ -14,12 +14,12 @@ namespace SchoolSite.Infrastructure.Business
 {
     public class SchoolService : ISchoolService
     {
-        private UnitOfWork uof;
+        private UnitOfWork unitOfWork;
         private IMapper mapp;
 
-        public SchoolService(UnitOfWork uof, Mapper mapper)
+        public SchoolService(UnitOfWork unitOfWork, Mapper mapper)
         {
-            this.uof = uof;
+            this.unitOfWork = unitOfWork;
             mapp = mapper;
         }
 
@@ -28,27 +28,27 @@ namespace SchoolSite.Infrastructure.Business
 
             if (this.GetAll().Find(i => i.Id == id) != null)
             {
-                uof.Schools.Delete(id);
-                uof.Save();
+                unitOfWork.Schools.Delete(id);
+                unitOfWork.Save();
             }
         }
 
         public List<SchoolViewModel> GetAll()
         {
-            var res = uof.Schools.Query().ToList().Select(x => mapp.Map<SchoolViewModel>(x)).ToList();
+            var res = unitOfWork.Schools.Query().ToList().Select(x => mapp.Map<SchoolViewModel>(x)).ToList();
             return res;
         }
 
-        public Feed<SchoolViewModel> GetSchoolFeed(int take)
+        public Feed<SchoolViewModel> GetSchoolFeed(int skip, int take)
         {
-            var res = uof.Schools.Query().ToList().Select(x => mapp.Map<SchoolViewModel>(x)).Take(take).ToList();
+            var res = unitOfWork.Schools.Query().OrderBy(x=>x.Id).Skip(skip).Take(take).ToList().Select(x => mapp.Map<SchoolViewModel>(x)).ToList();
 
-            return new Feed<SchoolViewModel>(res);
+            return new Feed<SchoolViewModel>(res, skip);
         }
 
         public Feed<SchoolViewModel> GetSchoolFeed()
         {
-            return new Feed<SchoolViewModel>(GetAll());
+            return new Feed<SchoolViewModel>(GetAll(), 10);
         }
 
         public void Save(SchoolViewModel item)
@@ -56,8 +56,8 @@ namespace SchoolSite.Infrastructure.Business
             if (item.Id == 0)
             {
                 School user = mapp.Map<School>(item);
-                uof.Schools.Create(user);
-                uof.Save();
+                unitOfWork.Schools.Create(user);
+                unitOfWork.Save();
             }
             else
             {
@@ -70,8 +70,8 @@ namespace SchoolSite.Infrastructure.Business
             if (this.GetAll().Find(i => i.Id == item.Id) != null)
             {
                 School user = mapp.Map<School>(item);
-                uof.Schools.Update(user);
-                uof.Save();
+                unitOfWork.Schools.Update(user);
+                unitOfWork.Save();
             }
         }
     }

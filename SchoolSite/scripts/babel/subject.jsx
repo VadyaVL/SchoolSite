@@ -36,7 +36,7 @@
             return;
         }
 
-        ajax.makeAjax("/Subject/PostSubject",
+        ajax.callAjax("/Subject/PostSubject",
                         {
                             Id: self.state.edit ? self.state.edit.Id : 0,
                             Title: self.state.title
@@ -54,7 +54,7 @@
 
     updateDataOnPage(toLoad) {
         self = this;
-        ajax.makeAjax("/Subject/JSON_Subject",
+        ajax.callAjax("/Subject/JSON_Subject",
                         {
     get: Boolean(toLoad),
                             count: self.state.count
@@ -70,7 +70,7 @@
 
     removeData(subject) {
         self = this;
-        ajax.makeAjax("/Subject/RemoveSubject",
+        ajax.callAjax("/Subject/RemoveSubject",
                         {
                             id: subject.Id
                         },
