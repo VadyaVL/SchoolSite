@@ -14,11 +14,6 @@ namespace SchoolSite.Infrastructure.Data
         private SchoolDBContext db;
         private bool disposed = false;
 
-
-        //public void Query(includes)
-        //{
-
-        //}
         public SchoolRepository(SchoolDBContext db)
         {
             this.db = db;

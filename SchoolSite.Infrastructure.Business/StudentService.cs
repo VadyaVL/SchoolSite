@@ -31,24 +31,35 @@ namespace SchoolSite.Infrastructure.Business
 
         public void Delete(int id)
         {
-            uof.Students.Delete(id);
-            uof.Save();
+            if (this.GetAll().Find(i => i.Id == id) != null)
+            {
+                uof.Students.Delete(id);
+                uof.Save();
+            }
         }
 
         public void Save(StudentCreateUpdateModel item)
         {
-            Student student = mapp.Map<StudentCreateUpdateModel, Student>(item);
-
-            uof.Students.Create(student);
-            uof.Save();
+            if (item.Id == 0)
+            {
+                Student student = mapp.Map<StudentCreateUpdateModel, Student>(item);
+                uof.Students.Create(student);
+                uof.Save();
+            }
+            else
+            {
+                this.Update(item);
+            }
         }
 
         public void Update(StudentCreateUpdateModel item)
         {
-            Student student = mapp.Map<StudentCreateUpdateModel, Student>(item);
-
-            uof.Students.Update(student);
-            uof.Save();
+            if (this.GetAll().Find(i => i.Id == item.Id) != null)
+            {
+                Student student = mapp.Map<StudentCreateUpdateModel, Student>(item);
+                uof.Students.Update(student);
+                uof.Save();
+            }
         }
 
         public Feed<StudentViewModel> GetStudentFeed(int take)

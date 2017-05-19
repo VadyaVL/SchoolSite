@@ -30,29 +30,40 @@ namespace SchoolSite.Infrastructure.Business
 
         public void Delete(int id)
         {
-            uof.Subjects.Delete(id);
-            uof.Save();
+            if (this.GetAll().Find(i => i.Id == id) != null)
+            {
+                uof.Subjects.Delete(id);
+                uof.Save();
+            }
         }
 
         public void Save(SubjectViewModel item)
         {
-            Subject subject = mapp.Map<SubjectViewModel, Subject>(item);
-
-            uof.Subjects.Create(subject);
-            uof.Save();
+            if (item.Id == 0)
+            {
+                Subject subject = mapp.Map<SubjectViewModel, Subject>(item);
+                uof.Subjects.Create(subject);
+                uof.Save();
+            }
+            else
+            {
+                this.Update(item);
+            }
         }
 
         public void Update(SubjectViewModel item)
         {
-            Subject subject = mapp.Map<SubjectViewModel, Subject>(item);
-            
-            uof.Subjects.Update(subject);
-            uof.Save();
+            if (this.GetAll().Find(i => i.Id == item.Id) != null)
+            {
+                Subject subject = mapp.Map<SubjectViewModel, Subject>(item);
+                uof.Subjects.Update(subject);
+                uof.Save();
+            }
         }
 
         public Feed<SubjectViewModel> GetSubjectFeed(int take)
         {
-           List<SubjectViewModel> all = mapp.Map<List<Subject>, List<SubjectViewModel>>(uof.Subjects.GetAll().Take(take).ToList());
+            List<SubjectViewModel> all = mapp.Map<List<Subject>, List<SubjectViewModel>>(uof.Subjects.GetAll().Take(take).ToList());
 
             return new Feed<SubjectViewModel>(all);
         }

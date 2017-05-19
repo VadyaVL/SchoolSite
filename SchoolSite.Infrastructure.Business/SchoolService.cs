@@ -25,8 +25,11 @@ namespace SchoolSite.Infrastructure.Business
 
         public void Delete(int id)
         {
-            uof.Schools.Delete(id);
-            uof.Save();
+            if (this.GetAll().Find(i => i.Id == id) != null)
+            {
+                uof.Schools.Delete(id);
+                uof.Save();
+            }
         }
 
         public List<SchoolViewModel> GetAll()
@@ -48,18 +51,26 @@ namespace SchoolSite.Infrastructure.Business
 
         public void Save(SchoolViewModel item)
         {
-            School user = mapp.Map<School>(item);
-
-            uof.Schools.Create(user);
-            uof.Save();
+            if (item.Id == 0)
+            {
+                School user = mapp.Map<School>(item);
+                uof.Schools.Create(user);
+                uof.Save();
+            }
+            else
+            {
+                this.Update(item);
+            }
         }
 
         public void Update(SchoolViewModel item)
         {
-            School user = mapp.Map<School>(item);
-
-            uof.Schools.Update(user);
-            uof.Save();
+            if (this.GetAll().Find(i => i.Id == item.Id) != null)
+            {
+                School user = mapp.Map<School>(item);
+                uof.Schools.Update(user);
+                uof.Save();
+            }
         }
     }
 }

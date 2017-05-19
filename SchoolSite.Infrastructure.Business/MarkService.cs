@@ -26,8 +26,11 @@ namespace SchoolSite.Infrastructure.Business
 
         public void Delete(int id)
         {
-            uof.Marks.Delete(id);
-            uof.Save();
+            if (this.GetAll().Find(i => i.Id == id) != null)
+            {
+                uof.Marks.Delete(id);
+                uof.Save();
+            }
         }
 
         public List<MarkViewModel> GetAll()
@@ -47,18 +50,26 @@ namespace SchoolSite.Infrastructure.Business
 
         public void Save(MarkCreateUpdateModel item)
         {
-            Mark mark = mapp.Map<Mark>(item);
-
-            uof.Marks.Create(mark);
-            uof.Save();
+            if (item.Id == 0)
+            {
+                Mark mark = mapp.Map<Mark>(item);
+                uof.Marks.Create(mark);
+                uof.Save();
+            }
+            else
+            {
+                this.Update(item);
+            }
         }
 
         public void Update(MarkCreateUpdateModel item)
         {
-            Mark mark = mapp.Map<Mark>(item);
-
-            uof.Marks.Update(mark);
-            uof.Save();
+            if (this.GetAll().Find(i => i.Id == item.Id) != null)
+            {
+                Mark mark = mapp.Map<Mark>(item);
+                uof.Marks.Update(mark);
+                uof.Save();
+            }
         }
     }
 }

@@ -1,11 +1,5 @@
-﻿using SchoolSite.Domain.Core;
-using SchoolSite.Domain.DTO;
-using SchoolSite.Infrastructure.Business;
+﻿using SchoolSite.Domain.DTO;
 using SchoolSite.Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace SchoolSite.Controllers
@@ -18,7 +12,7 @@ namespace SchoolSite.Controllers
         {
             subjectService = ss;
         }
-        // GET: Subject
+
         public ActionResult Index()
         {
             return View("subject");
@@ -26,55 +20,27 @@ namespace SchoolSite.Controllers
         
         public ActionResult JSON_ALL_Subject()
         {
-            this.ControllerContext.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-
             return Json(subjectService.GetSubjectFeed(), JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult JSON_Subject(bool get = false, int count = 0)
         {
-            this.ControllerContext.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-
             if (get)
                 return Json(subjectService.GetSubjectFeed(count + 10), JsonRequestBehavior.AllowGet);
             else
                 return Json(subjectService.GetSubjectFeed(count), JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult PostSubject(int id, String title)
+        public ActionResult PostSubject(SubjectViewModel svm)
         {
-            this.ControllerContext.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-
-            if (id == 0)
-            {
-                SubjectViewModel s = new SubjectViewModel();
-                s.Title = title;
-                subjectService.Save(s);
-            }
-            else
-            {
-                SubjectViewModel fSubject = subjectService.GetAll().Find(i => i.Id == id);
-
-                if (fSubject != null)
-                {
-                    fSubject.Title = title;
-                    subjectService.Update(fSubject);
-                }
-            }
-
+            subjectService.Save(svm);
+            
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult RemoveSubject(int id)
         {
-            this.ControllerContext.HttpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-
-            SubjectViewModel fSubject = subjectService.GetAll().Find(i => i.Id == id);
-
-            if (fSubject != null)
-            {
-                subjectService.Delete(fSubject.Id);
-            }
+            subjectService.Delete(id);
 
             return Json(true, JsonRequestBehavior.AllowGet);
         }

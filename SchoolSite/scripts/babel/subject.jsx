@@ -6,7 +6,8 @@
             data: [],
             title: '',
             statePopUP: "invisible-pop-up",
-            titleMess: ''
+            titleMess: '',
+            parentPopUp: ""
         };
 
         this.saveData = this.saveData.bind(this);
@@ -35,10 +36,10 @@
             return;
         }
 
-        ajax.makeAjax("http://localhost:2175/Subject/PostSubject",
+        ajax.makeAjax("/Subject/PostSubject",
                         {
-                            id: self.state.edit ? self.state.edit.Id : 0,
-                            title: self.state.title
+                            Id: self.state.edit ? self.state.edit.Id : 0,
+                            Title: self.state.title
                         },
                         function () {
                             if (self.state.count % 10 != 0 || self.state.count == 0) {
@@ -53,7 +54,7 @@
 
     updateDataOnPage(toLoad) {
         self = this;
-        ajax.makeAjax("http://localhost:2175/Subject/JSON_Subject",
+        ajax.makeAjax("/Subject/JSON_Subject",
                         {
     get: Boolean(toLoad),
                             count: self.state.count
@@ -69,7 +70,7 @@
 
     removeData(subject) {
         self = this;
-        ajax.makeAjax("http://localhost:2175/Subject/RemoveSubject",
+        ajax.makeAjax("/Subject/RemoveSubject",
                         {
                             id: subject.Id
                         },
@@ -82,10 +83,10 @@
         this.setState({ title: subject ? subject.Title : "", edit: subject });
 
         if (this.state.statePopUP === "invisible-pop-up") {
-            this.setState({ statePopUP: "visible-pop-up" });
+            this.setState({ statePopUP: "visible-pop-up", parentPopUp: "background-pop-up" });
         }
         else {
-            this.setState({ statePopUP: "invisible-pop-up" });
+            this.setState({ statePopUP: "invisible-pop-up", parentPopUp: "" });
         }
     }
 
@@ -124,6 +125,7 @@
                 <button className="btn-add" onClick={() => this.updateDataOnPage(true)}>See more</button>
             </div>
 
+                <div className={this.state.parentPopUp}>
          <div className={this.state.statePopUP}>
                  <form className="input-form">
                      <div>
@@ -139,7 +141,8 @@
                             </div>
                  </form>
          </div>
-            </div>
+                </div>
+                </div>
         );
     }
 }

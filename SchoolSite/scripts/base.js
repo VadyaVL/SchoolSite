@@ -3,7 +3,7 @@
     makeAjax(url, data, success) {
         $.post({
             url: url,
-            type: "GET",
+            type: "POST",
             dataType: "html",
             format: "json",
             traditional: true,

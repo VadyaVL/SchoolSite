@@ -5,44 +5,43 @@
         this.state = {
             data: [],
             count: 0,
-            student: null,
-            subject: null,
             students: [],
             subjects: [],
+            student: '',
+            subject: '',
             value: '',
-            statePopUP: "invisible-pop-up",
-            valueMess: ''
+            valueMess: '',
+            popupClassName: 'invisible-pop-up',
+            popupParentClassName: ''
         };
 
-
-        ajax.makeAjax("http://localhost:2175/Student/JSON_ALL_Student",
-                        {},
+        ajax.makeAjax('/Student/JSON_ALL_Student', {},
                         function (data) {
                             self.setState({
                                 students: JSON.parse(data).Items,
-                                student: JSON.parse(data).Items ? JSON.parse(data).Items[0].Id : null,
+                                student: JSON.parse(data).Items ? JSON.parse(data).Items[0].Id : '',
                             });
                         });
 
-        ajax.makeAjax("http://localhost:2175/Subject/JSON_ALL_Subject",
-                        {},
+        ajax.makeAjax('/Subject/JSON_ALL_Subject', {},
                         function (data) {
                             self.setState({
                                 subjects: JSON.parse(data).Items,
-                                subject: JSON.parse(data).Items ? JSON.parse(data).Items[0].Id : null,
+                                subject: JSON.parse(data).Items ? JSON.parse(data).Items[0].Id : '',
                             });
                         });
 
         this.saveData = this.saveData.bind(this);
         this.removeData = this.removeData.bind(this);
 
-        this.getRows = this.getRows.bind(this);
+        this.initRows = this.initRows.bind(this);
         this.initComboBoxStudent = this.initComboBoxStudent.bind(this);
         this.initComboBoxSubject = this.initComboBoxSubject.bind(this);
-        this.changeStatePopUP = this.changeStatePopUP.bind(this);
-        this.updateDataOnPage = this.updateDataOnPage.bind(this);
-        this.changeValue = this.changeValue.bind(this);
 
+        this.changePopUpState = this.changePopUpState.bind(this);
+        this.updateDataOnPage = this.updateDataOnPage.bind(this);
+
+        this.changeValue = this.changeValue.bind(this);
         this.changeStudent = this.changeStudent.bind(this);
         this.changeSubject = this.changeSubject.bind(this);
 
@@ -56,19 +55,25 @@
             valueMess: ''
         });
 
-        if (self.state.value == "") {
+        if (self.state.value == '') {
             self.setState({
                 valueMess: 'Mark is Empty!'
             });
-
             return;
         }
-        ajax.makeAjax("http://localhost:2175/Mark/PostMark",
+        else if (self.state.value <= 0 || self.state.value > 5) {
+            self.setState({
+                valueMess: 'Mark must be [1; 5]!'
+            });
+            return;
+        }
+
+        ajax.makeAjax('/Mark/PostMark',
                         {
-                            id: self.state.edit ? self.state.edit.Id : 0,
-                            student_id: self.state.student,
-                            subject_id: self.state.subject,
-                            value: self.state.value,
+                            Id: self.state.edit ? self.state.edit.Id : 0,
+                            StudentId: self.state.student,
+                            SubjectId: self.state.subject,
+                            Value: self.state.value,
                         },
                         function () {
                             if (self.state.count % 10 != 0 || self.state.count == 0) {
@@ -77,15 +82,15 @@
                                 });
                             }
                             self.updateDataOnPage();
-                            self.changeStatePopUP();
+                            self.changePopUpState();
                         });
     }
 
     updateDataOnPage(toLoad) {
         self = this;
-        ajax.makeAjax("http://localhost:2175/Mark/JSON_Mark",
+        ajax.makeAjax('/Mark/JSON_Mark',
                         {
-    get: Boolean(toLoad),
+                            get: Boolean(toLoad),
                             count: self.state.count
                         },
                         function (data) {
@@ -99,7 +104,7 @@
 
     removeData(mark) {
         self = this;
-        ajax.makeAjax("http://localhost:2175/Mark/RemoveMark",
+        ajax.makeAjax('/Mark/RemoveMark',
                         {
                             id: mark.Id
                         },
@@ -108,15 +113,26 @@
                         });
     }
 
-    changeStatePopUP(school) {
+    changePopUpState(mark) {
+        self = this;
+        this.setState({
+            edit: mark,
+            value: mark ? mark.Value : '',
+            student: mark ? mark.Student.Id : (self.state.students ? self.state.students[0].Id : ''),
+            subject: mark ? mark.Subject.Id : (self.state.subjects ? self.state.subjects[0].Id : '')
+        });
 
-        this.setState({ name: school ? school.Name : "", edit: school });
-
-        if (this.state.statePopUP === "invisible-pop-up") {
-            this.setState({ statePopUP: "visible-pop-up" });
+        if (this.state.popupClassName === 'invisible-pop-up') {
+            this.setState({
+                popupClassName: 'visible-pop-up',
+                popupParentClassName: 'background-pop-up'
+            });
         }
         else {
-            this.setState({ statePopUP: "invisible-pop-up" });
+            this.setState({
+                popupClassName: 'invisible-pop-up',
+                popupParentClassName: ''
+            });
         }
     }
 
@@ -132,15 +148,15 @@
         this.setState({ subject: event.target.value });
     }
 
-    getRows(marks) {
+    initRows(marks) {
         return marks.map((mark) =>
-            <div className="div-row" key={mark.Id}>
-                <div className="div-col-num">{mark.Id}</div>
-                <div className="div-col">{mark.Student.LastName + " " + mark.Student.FirstName}</div>
-                <div className="div-col">{mark.Subject.Title}</div>
-                <div className="div-col-num">{mark.Value}</div>
-                <div className="div-col-btn"><button className="btn-edit" onClick={() => this.changeStatePopUP(mark)}>Edit</button></div>
-                <div className="div-col-btn"><button className="btn-remove" onClick={() => this.removeData(mark)}>Remove</button></div>
+            <div className='div-row' key={mark.Id}>
+                <div className='div-col-num'>{mark.Id}</div>
+                <div className='div-col'>{mark.Student.LastName + ' ' + mark.Student.FirstName}</div>
+                <div className='div-col'>{mark.Subject.Title}</div>
+                <div className='div-col-num'>{mark.Value}</div>
+                <div className='div-col-btn'><button className='btn-edit' onClick={() => this.changePopUpState(mark)}>Edit</button></div>
+                <div className='div-col-btn'><button className='btn-remove' onClick={() => this.removeData(mark)}>Remove</button></div>
             </div>
         );
     }
@@ -153,70 +169,72 @@
 
     initComboBoxStudent(students) {
         return students.map((student) =>
-            <option key={student.Id} value={student.Id }>{student.FirstName + " " + student.LastName}</option>
+            <option key={student.Id} value={student.Id }>{student.FirstName + ' ' + student.LastName}</option>
         );
     }
 
-
     render() {
         return (
-            <div className="contentFromReact">
-                <div>
-                    <button className="btn-add" onClick={() => this.changeStatePopUP()}>Add Mark</button>
+        <div className='contentFromReact'>
+            <div>
+                <button className='btn-add' onClick={() => this.changePopUpState()}>Add Mark</button>
+            </div>
+
+            <div className='div-table'>
+                <div className='div-row-head'>
+                    <div className='div-col-num'>ID</div>
+                    <div className='div-col'>Student</div>
+                    <div className='div-col'>Subject</div>
+                    <div className='div-col-num'>Mark</div>
+                    <div className='div-col-btn'></div>
+                    <div className='div-col-btn'></div>
                 </div>
+                {this.initRows(this.state.data)}
+            </div>
 
-               <div className="div-table">
-                    <div className="div-row-head">
-                        <div className="div-col-num">ID</div>
-                        <div className="div-col">Student</div>
-                        <div className="div-col">Subject</div>
-                        <div className="div-col-num">Mark</div>
-                        <div className="div-col-btn"></div>
-                        <div className="div-col-btn"></div>
-                    </div>
-                   {this.getRows(this.state.data)}
-               </div>
+            <div>
+                <button className='btn-add' onClick={() => this.updateDataOnPage(true)}>See more</button>
+            </div>
 
-         <div>
-             <button className="btn-add" onClick={() => this.updateDataOnPage(true)}>See more</button>
-         </div>
-
-         <div className={this.state.statePopUP}>
-                 <form className="input-form">
-                    <div>
-                        <label>
-                            Student:
-                                <select onChange={this.changeStudent}>
+            <div className={this.state.popupParentClassName}>
+                <div className={this.state.popupClassName}>
+                    <form className='input-form'>
+                        <div>
+                            <label>
+                                Student:
+                                <select value={this.state.student} onChange={this.changeStudent}>
                                     {this.initComboBoxStudent(this.state.students)}
                                 </select>
-                        </label>
-                    </div>
+                            </label>
+                        </div>
 
-                    <div>
-                        <label>
-                            Subject:
-                                <select onChange={this.changeSubject}>
+                        <div>
+                            <label>
+                                Subject:
+                                <select value={this.state.subject} onChange={this.changeSubject}>
                                     {this.initComboBoxSubject(this.state.subjects)}
                                 </select>
-                        </label>
-                    </div>
+                            </label>
+                        </div>
 
-                     <div>
-                        <label>
-                            Mark:
-                                <input type="number" onChange={this.changeValue} value={this.state.value} placeholder="Set mark..." />
-                        </label>
-                        <p className="errorMess">{this.state.valueMess}</p>
-                     </div><hr />
-                            <div>
-                                <button type="button" className="btn-save" onClick={() => this.saveData()}>Save</button>
-                                <button type="button" className="btn-cancel" onClick={() => this.changeStatePopUP()}>Cancel</button>
-                            </div>
-                 </form>
-         </div>
+                        <div>
+                            <label>
+                                Mark:
+                                <input type='number' onChange={this.changeValue} value={this.state.value} placeholder='Set mark...' />
+                            </label>
+                            <p className='errorMess'>{this.state.valueMess}</p>
+                        </div><hr />
+
+                        <div>
+                            <button type='button' className='btn-save' onClick={() => this.saveData()}>Save</button>
+                            <button type='button' className='btn-cancel' onClick={() => this.changePopUpState()}>Cancel</button>
+                        </div>
+                    </form>
+                </div>
             </div>
+        </div>
         );
     }
 }
 
-ReactDOM.render(<MarkData />, document.getElementById("content"));
+ReactDOM.render(<MarkData />, document.getElementById('content'));

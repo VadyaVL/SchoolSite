@@ -5,22 +5,23 @@
         this.state = {
             data: [],
             schools: [],
-            firstName: "",
-            lastName: "",
-            age: "",
-            schoolId: null,
-            statePopUP: "invisible-pop-up",
-            firstNameMess: "",
-            lastNameMess: "",
-            ageMess: ""
+            firstName: '',
+            lastName: '',
+            age: '',
+            schoolId: '',
+            statePopUP: 'invisible-pop-up',
+            firstNameMess: '',
+            lastNameMess: '',
+            ageMess: '',
+            parentPopUp: ''
         };
 
-        ajax.makeAjax("http://localhost:2175/School/JSON_ALL_School",
+        ajax.makeAjax('/School/JSON_ALL_School',
                         {},
                         function (data) {
                             self.setState({
                                 schools: JSON.parse(data).Items,
-                                schoolId: JSON.parse(data).Items ? JSON.parse(data).Items[0].Id : null
+                                schoolId: JSON.parse(data).Items ? JSON.parse(data).Items[0].Id : ''
                             });
                         });
 
@@ -45,28 +46,28 @@
         self = this;
 
         self.setState({
-            firstNameMess: "",
-            lastNameMess: "",
-            ageMess: ""
+            firstNameMess: '',
+            lastNameMess: '',
+            ageMess: ''
         });
 
-        var isOk = !(self.state.firstName === "" || self.state.lastName === "" || self.state.age === "");
+        var isOk = !(self.state.firstName === '' || self.state.lastName === '' || self.state.age === '');
 
         if (!isOk) {
 
-            if (self.state.firstName === "") {
+            if (self.state.firstName === '') {
                 self.setState({
                     firstNameMess: 'First Name is Empty!'
                 });
             }
 
-            if (self.state.lastName === "") {
+            if (self.state.lastName === '') {
                 self.setState({
                     lastNameMess: 'Last Name is Empty!'
                 });
             }
 
-            if (self.state.age === "") {
+            if (self.state.age === '') {
                 self.setState({
                     ageMess: 'Age is Empty!'
                 });
@@ -75,13 +76,13 @@
             return;
         }
 
-        ajax.makeAjax("http://localhost:2175/Student/PostStudent",
+        ajax.makeAjax('/Student/PostStudent',
                         {
-                            id: self.state.edit ? self.state.edit.Id : 0,
-                            firstName: self.state.firstName,
-                            lastName: self.state.lastName,
-                            age: self.state.age,
-                            schoolId: self.state.schoolId
+                            Id: self.state.edit ? self.state.edit.Id : 0,
+                            FirstName: self.state.firstName,
+                            LastName: self.state.lastName,
+                            Age: self.state.age,
+                            SchoolId: self.state.schoolId
                         },
                         function () {
                             if (self.state.count % 10 != 0 || self.state.count == 0) {
@@ -96,9 +97,9 @@
 
     updateDataOnPage(toLoad) {
         self = this;
-        ajax.makeAjax("http://localhost:2175/Student/JSON_Student",
+        ajax.makeAjax('/Student/JSON_Student',
                         {
-    get: Boolean(toLoad),
+                            get: Boolean(toLoad),
                             count: self.state.count
                         },
                         function (data) {
@@ -112,7 +113,7 @@
 
     removeData(student) {
         self = this;
-        ajax.makeAjax("http://localhost:2175/Student/RemoveStudent",
+        ajax.makeAjax('/Student/RemoveStudent',
                         {
                             id: student.Id
                         },
@@ -122,19 +123,22 @@
     }
 
     changeStatePopUP(student) {
+        self = this;
+
         this.setState({
-            firstName: student ? student.FirstName : "",
-            lastName: student ? student.LastName : "",
-            age: student ? student.Age : "",
+            firstName: student ? student.FirstName : '',
+            lastName: student ? student.LastName : '',
+            age: student ? student.Age : '',
+            schoolId: student ? student.School.Id : (self.state.schools ? self.state.schools[0].Id : ''),
             edit: student
         });
 
 
-        if (this.state.statePopUP === "invisible-pop-up") {
-            this.setState({ statePopUP: "visible-pop-up" });
+        if (this.state.statePopUP === 'invisible-pop-up') {
+            this.setState({ statePopUP: 'visible-pop-up', parentPopUp: 'background-pop-up' });
         }
         else {
-            this.setState({ statePopUP: "invisible-pop-up" });
+            this.setState({ statePopUP: 'invisible-pop-up', parentPopUp: '' });
         }
     }
 
@@ -169,14 +173,14 @@
 
     getRows(students) {
         return students.map((student) =>
-            <div className="div-row" key={student.Id}>
-                <div className="div-col-num">{student.Id}</div>
-                <div className="div-col">{student.FirstName}</div>
-                <div className="div-col">{student.LastName}</div>
-                <div className="div-col-num">{student.Age}</div>
-                <div className="div-col">{student.School.Name}</div>
-                <div className="div-col-btn"><button className="btn-edit" onClick={() => this.changeStatePopUP(student)}>Edit</button></div>
-                <div className="div-col-btn"><button className="btn-remove" onClick={() => this.removeData(student)}>Remove</button></div>
+            <div className='div-row' key={student.Id}>
+                <div className='div-col-num'>{student.Id}</div>
+                <div className='div-col'>{student.FirstName}</div>
+                <div className='div-col'>{student.LastName}</div>
+                <div className='div-col-num'>{student.Age}</div>
+                <div className='div-col'>{student.School.Name}</div>
+                <div className='div-col-btn'><button className='btn-edit' onClick={() => this.changeStatePopUP(student)}>Edit</button></div>
+                <div className='div-col-btn'><button className='btn-remove' onClick={() => this.removeData(student)}>Remove</button></div>
             </div>
         );
     }
@@ -189,54 +193,55 @@
 
     render() {
         return (
-            <div className="contentFromReact">
+            <div className='contentFromReact'>
                 <div>
-                    <button className="btn-add" onClick={() => this.changeStatePopUP()}>Add Student</button>
+                    <button className='btn-add' onClick={() => this.changeStatePopUP()}>Add Student</button>
                 </div>
-               <div className="div-table">
-                    <div className="div-row-head">
-                        <div className="div-col-num">ID</div>
-                        <div className="div-col">First Name</div>
-                        <div className="div-col">Last Name</div>
-                        <div className="div-col-num">Age</div>
-                        <div className="div-col">School</div>
-                        <div className="div-col-btn"></div>
-                        <div className="div-col-btn"></div>
+               <div className='div-table'>
+                    <div className='div-row-head'>
+                        <div className='div-col-num'>ID</div>
+                        <div className='div-col'>First Name</div>
+                        <div className='div-col'>Last Name</div>
+                        <div className='div-col-num'>Age</div>
+                        <div className='div-col'>School</div>
+                        <div className='div-col-btn'></div>
+                        <div className='div-col-btn'></div>
                     </div>
                    {this.getRows(this.state.data)}
                </div>
         <div>
-            <button className="btn-add" onClick={() => this.updateDataOnPage(true)}>See more</button>
+            <button className='btn-add' onClick={() => this.updateDataOnPage(true)}>See more</button>
         </div>
 
+        <div className={this.state.parentPopUp}>
          <div className={this.state.statePopUP}>
-                 <form className="input-form">
+                 <form className='input-form'>
                          <div>
                              <div>
                                 <label>
                                     First name:
-                                    <input type="text" onChange={this.changeFirstName} value={this.state.firstName} placeholder="First name..." />
+                                    <input type='text' onChange={this.changeFirstName} value={this.state.firstName} placeholder='First name...' />
                                 </label>
-                                 <p className="errorMess">{this.state.firstNameMess}</p>
+                                 <p className='errorMess'>{this.state.firstNameMess}</p>
                              </div>
                              <div>
                                 <label>
                                     Last name:
-                                    <input type="text" onChange={this.changeLastName} value={this.state.lastName} placeholder="Last name..." />
+                                    <input type='text' onChange={this.changeLastName} value={this.state.lastName} placeholder='Last name...' />
                                 </label>
-                                 <p className="errorMess">{this.state.lastNameMess}</p>
+                                 <p className='errorMess'>{this.state.lastNameMess}</p>
                              </div>
                              <div>
                                 <label>
                                     Age:
-                                    <input type="number" onChange={this.changeAge} value={this.state.age} placeholder="Age..." />
+                                    <input type='number' onChange={this.changeAge} value={this.state.age} placeholder='Age...' />
                                 </label>
-                                 <p className="errorMess">{this.state.ageMess}</p>
+                                 <p className='errorMess'>{this.state.ageMess}</p>
                              </div>
                              <div>
                                 <label>
                                     School:
-                                     <select onChange={this.changeSchool}>
+                                     <select value={this.state.schoolId} onChange={this.changeSchool} >
                                          {this.initComboBox()}
                                      </select>
                                 </label>
@@ -244,14 +249,15 @@
                          </div>
                     <hr />
                     <div>
-                        <button type="button" className="btn-save" onClick={() => this.saveData()}>Save</button>
-                        <button type="button" className="btn-cancel" onClick={() => this.changeStatePopUP()}>Cancel</button>
+                        <button type='button' className='btn-save' onClick={() => this.saveData()}>Save</button>
+                        <button type='button' className='btn-cancel' onClick={() => this.changeStatePopUP()}>Cancel</button>
                     </div>
                  </form>
          </div>
-            </div>
+        </div>
+        </div>
         );
     }
 }
 
-ReactDOM.render(<StudentData />, document.getElementById("content"));
+ReactDOM.render(<StudentData />, document.getElementById('content'));

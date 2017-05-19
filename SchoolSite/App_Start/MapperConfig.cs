@@ -16,10 +16,17 @@ namespace SchoolSite.Util
         {
             Mapper.Initialize(cfg => {
                 cfg.CreateMap<Mark, MarkViewModel>();
+                cfg.CreateMap<MarkViewModel, Mark>();
+
+                cfg.CreateMap<MarkCreateUpdateModel, MarkViewModel>();
+                cfg.CreateMap<MarkViewModel, MarkCreateUpdateModel>();
+
                 cfg.CreateMap<MarkCreateUpdateModel, Mark>();
                 cfg.CreateMap<School, SchoolViewModel>();
                 cfg.CreateMap<SchoolViewModel, School>();
                 cfg.CreateMap<Student, StudentViewModel>();
+                cfg.CreateMap<StudentCreateUpdateModel, StudentViewModel>();
+                cfg.CreateMap<StudentViewModel, StudentCreateUpdateModel>();
                 cfg.CreateMap<StudentCreateUpdateModel, Student>();
                 cfg.CreateMap<Subject, SubjectViewModel>();
                 cfg.CreateMap<SubjectViewModel, Subject>();
