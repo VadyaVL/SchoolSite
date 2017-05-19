@@ -25,7 +25,8 @@ namespace SchoolSite.Infrastructure.Business
 
         public List<SubjectViewModel> GetAll()
         {
-            return mapp.Map<List<Subject>, List<SubjectViewModel>>(uof.Subjects.GetAll().ToList());
+            var res = uof.Subjects.Query().ToList().Select(x => mapp.Map<SubjectViewModel>(x)).ToList();
+            return res;
         }
 
         public void Delete(int id)
@@ -63,14 +64,13 @@ namespace SchoolSite.Infrastructure.Business
 
         public Feed<SubjectViewModel> GetSubjectFeed(int take)
         {
-            List<SubjectViewModel> all = mapp.Map<List<Subject>, List<SubjectViewModel>>(uof.Subjects.GetAll().Take(take).ToList());
-
-            return new Feed<SubjectViewModel>(all);
+            var res = uof.Subjects.Query().ToList().Select(x => mapp.Map<SubjectViewModel>(x)).Take(take).ToList();
+            return new Feed<SubjectViewModel>(res);
         }
 
         public Feed<SubjectViewModel> GetSubjectFeed()
         {
-            return new Feed<SubjectViewModel>(mapp.Map<List<SubjectViewModel>>(uof.Subjects.GetAll().ToList()));
+            return new Feed<SubjectViewModel>(GetAll());
         }
 
         public SubjectViewModel Get(int id)

@@ -25,6 +25,7 @@ namespace SchoolSite.Infrastructure.Business
 
         public void Delete(int id)
         {
+
             if (this.GetAll().Find(i => i.Id == id) != null)
             {
                 uof.Schools.Delete(id);
@@ -34,19 +35,20 @@ namespace SchoolSite.Infrastructure.Business
 
         public List<SchoolViewModel> GetAll()
         {
-            return mapp.Map<List<SchoolViewModel>>(uof.Schools.GetAll().ToList());
+            var res = uof.Schools.Query().ToList().Select(x => mapp.Map<SchoolViewModel>(x)).ToList();
+            return res;
         }
 
         public Feed<SchoolViewModel> GetSchoolFeed(int take)
         {
-            List<SchoolViewModel> all = mapp.Map<List<SchoolViewModel>>(uof.Schools.GetAll().Take(take).ToList());
+            var res = uof.Schools.Query().ToList().Select(x => mapp.Map<SchoolViewModel>(x)).Take(take).ToList();
 
-            return new Feed<SchoolViewModel>(all);
+            return new Feed<SchoolViewModel>(res);
         }
 
         public Feed<SchoolViewModel> GetSchoolFeed()
         {
-            return new Feed<SchoolViewModel>(mapp.Map<List<SchoolViewModel>>(uof.Schools.GetAll().ToList()));
+            return new Feed<SchoolViewModel>(GetAll());
         }
 
         public void Save(SchoolViewModel item)

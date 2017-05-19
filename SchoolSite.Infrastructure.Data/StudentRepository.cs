@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SchoolSite.Domain.Core;
 using System.Data.Entity;
+using System.Linq.Expressions;
 
 namespace SchoolSite.Infrastructure.Data
 {
@@ -18,6 +19,16 @@ namespace SchoolSite.Infrastructure.Data
         public StudentRepository(SchoolDBContext db)
         {
             this.db = db;
+        }
+
+        public virtual IQueryable<Student> Query(params Expression<Func<Student, object>>[] includes)
+        {
+            IQueryable<Student> query = db.Students;
+
+            foreach (Expression<Func<Student, object>> include in includes)
+                query = query.Include(include);
+
+            return query;
         }
 
         public void Create(Student item)

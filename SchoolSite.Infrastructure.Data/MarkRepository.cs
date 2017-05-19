@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SchoolSite.Domain.Core;
 using System.Data.Entity;
+using System.Linq.Expressions;
 
 namespace SchoolSite.Infrastructure.Data
 {
@@ -77,6 +78,16 @@ namespace SchoolSite.Infrastructure.Data
 
             db.Entry(itemInDb).CurrentValues.SetValues(item);
             db.Entry(itemInDb).State = EntityState.Modified;
+        }
+
+        public virtual IQueryable<Mark> Query(params Expression<Func<Mark, object>>[] includes)
+        {
+            IQueryable<Mark> query = db.Marks;
+
+            foreach (Expression<Func<Mark, object>> include in includes)
+                query = query.Include(include);
+
+            return query;
         }
     }
 }

@@ -35,17 +35,19 @@ namespace SchoolSite.Infrastructure.Business
 
         public List<MarkViewModel> GetAll()
         {
-            return mapp.Map<List<MarkViewModel>>(uof.Marks.GetAll().ToList());
+            var res = uof.Marks.Query().ToList().Select(x => mapp.Map<MarkViewModel>(x)).ToList();
+            return res;
         }
 
         public Feed<MarkViewModel> GetMarkFeed(int take)
         {
-            return new Feed<MarkViewModel>(mapp.Map<List<MarkViewModel>>(uof.Marks.GetAll().Take(take).ToList()));
+            var res = uof.Marks.Query().ToList().Select(x => mapp.Map<MarkViewModel>(x)).Take(take).ToList();
+            return new Feed<MarkViewModel>(res);
         }
 
         public Feed<MarkViewModel> GetMarkFeed()
         {
-            return new Feed<MarkViewModel>(mapp.Map<List<MarkViewModel>>(uof.Marks.GetAll().ToList()));
+            return new Feed<MarkViewModel>(GetAll());
         }
 
         public void Save(MarkCreateUpdateModel item)

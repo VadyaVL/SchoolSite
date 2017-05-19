@@ -26,7 +26,8 @@ namespace SchoolSite.Infrastructure.Business
 
         public List<StudentViewModel> GetAll()
         {
-            return mapp.Map<List<Student>, List<StudentViewModel>>(uof.Students.GetAll().ToList());
+            var res = uof.Students.Query().ToList().Select(x => mapp.Map<StudentViewModel>(x)).ToList();
+            return res;
         }
 
         public void Delete(int id)
@@ -64,14 +65,13 @@ namespace SchoolSite.Infrastructure.Business
 
         public Feed<StudentViewModel> GetStudentFeed(int take)
         {
-            List<StudentViewModel> users = mapp.Map<List<Student>, List<StudentViewModel>>(uof.Students.GetAll().Take(take).ToList());
-
-            return new Feed<StudentViewModel>(users);
+            var res = uof.Students.Query().ToList().Select(x => mapp.Map<StudentViewModel>(x)).Take(take).ToList();
+            return new Feed<StudentViewModel>(res);
         }
 
         public Feed<StudentViewModel> GetStudentFeed()
         {
-            return new Feed<StudentViewModel>(mapp.Map<List<StudentViewModel>>(uof.Students.GetAll().ToList()));
+            return new Feed<StudentViewModel>(GetAll());
         }
 
         public StudentViewModel Get(int id)
