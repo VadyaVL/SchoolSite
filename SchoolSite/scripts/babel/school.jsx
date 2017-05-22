@@ -4,7 +4,7 @@
 
         this.state = {
             data: [],   count: 0,
-            name: '',   nameMess: '',
+            name: '',   nameMess: 'Name is Empty!', errorName: '',
             loadPopUPClass: 'background-pop-up-off',
             inputPopUPClass: 'background-pop-up-off'
         };
@@ -23,10 +23,9 @@
 
     saveData() {
         self = this;
-        self.setState({  nameMess: '' });
 
         if (self.state.name === '') {
-            self.setState({ nameMess: 'Name is Empty!' });
+            self.setState({errorName: 'tooltip' });
             return;
         }
 
@@ -105,7 +104,7 @@
     }
 
     setPopUPForm(school) {
-        this.setState({ name: school ? school.Name : '', edit: school });
+        this.setState({ name: school ? school.Name : '', edit: school, errorName: '' });
 
         if (this.state.inputPopUPClass === 'background-pop-up-off') {
             this.setState({ inputPopUPClass: 'background-pop-up' });
@@ -117,6 +116,10 @@
 
     changeInputName(event) {
         this.setState({ name: event.target.value });
+
+        if (event.target.value != "") {
+            self.setState({ errorName: '' });
+        }
     }
 
     render() {
@@ -137,7 +140,7 @@
                         <div className='div-col-btn'></div>
                         <div className='div-col-btn'></div>
                     </div>
-                {   this.state.data.map((school) => <TableItem key={school.Id} school={school} edit={self.setPopUPForm} remove={self.removeData} />)}
+                    {this.state.data.map((school) => <TableItem key={school.Id} school={school} edit={self.setPopUPForm} remove={self.removeData} />)}
                 </div>
 
                 <div>
@@ -149,9 +152,10 @@
                         <div>
                             <label>
                                 Name:
-                                <input type='text' onChange={this.changeInputName} value={this.state.name} placeholder='Enter the school name...' />
+                                <span className={this.state.errorName} data-title={this.state.nameMess}>
+                                    <input type='text' onChange={this.changeInputName} value={this.state.name} placeholder='Enter the school name...' />
+                                </span>
                             </label>
-                            <p className='error-mess'>{this.state.nameMess}</p>
                         </div>
                         <hr />
                         <div>

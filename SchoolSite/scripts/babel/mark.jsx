@@ -6,7 +6,7 @@
             data: [],       count: 0,
             students: [],   student: '',
             subjects: [],   subject: '',
-            value: '',      valueMess: '',
+            value: '', errorValue: '', valueMess: 'Mark is Empty!',
             loadPopUPClass: 'background-pop-up-off',
             inputPopUPClass: 'background-pop-up-off'
         };
@@ -50,14 +50,13 @@
 
     saveData() {
         self = this;
-        self.setState({ valueMess: '' });
 
         if (self.state.value == '') {
-            self.setState({ valueMess: 'Mark is Empty!' });
+            self.setState({ errorValue: 'tooltip', valueMess: 'Mark is Empty!' });
             return;
         }
         else if (self.state.value <= 0 || self.state.value > 5) {
-            self.setState({ valueMess: 'Mark must be [1; 5]!' });
+            self.setState({ errorValue: 'tooltip', valueMess: 'Mark must be [1; 5]!' });
             return;
         }
 
@@ -155,7 +154,8 @@
             edit: mark,
             value: mark ? mark.Value : '',
             student: mark ? mark.Student.Id : (self.state.students ? self.state.students[0].Id : ''),
-            subject: mark ? mark.Subject.Id : (self.state.subjects ? self.state.subjects[0].Id : '')
+            subject: mark ? mark.Subject.Id : (self.state.subjects ? self.state.subjects[0].Id : ''),
+            errorValue: '',
         });
 
         if (this.state.inputPopUPClass === 'background-pop-up-off') {
@@ -168,6 +168,10 @@
 
     changeValue(event) {
         this.setState({ value: event.target.value });
+
+        if (event.target.value != "") {
+            self.setState({ errorValue: '' });
+        }
     }
 
     changeStudent(event) {
@@ -238,9 +242,10 @@
                         <div>
                             <label>
                                 Mark:
-                                <input type='number' onChange={this.changeValue} value={this.state.value} placeholder='Set mark...' />
+                                <span className={this.state.errorValue} data-title={this.state.valueMess}>
+                                    <input type='number' onChange={this.changeValue} value={this.state.value} placeholder='Set mark...' />
+                                </span>
                             </label>
-                            <p className='error-mess'>{this.state.valueMess}</p>
                         </div><hr />
 
                         <div>

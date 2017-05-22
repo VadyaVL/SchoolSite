@@ -5,9 +5,9 @@
         this.state = {
             data: [],   count: 0,
             schools: [],
-            firstName: '',  firstNameMess: '',
-            lastName: '',   lastNameMess: '',
-            age: '',        ageMess: '',
+            firstName: '', errorFirstName: '', firstNameMess: 'First Name is Empty!',
+            lastName: '', errorLastName: '', lastNameMess: 'Last Name is Empty!',
+            age: '', errorAge: '', ageMess: 'Age is Empty!',
             schoolId: '',
             loadPopUPClass: 'background-pop-up-off',
             inputPopUPClass: 'background-pop-up-off'
@@ -46,32 +46,26 @@
 
     saveData() {
         self = this;
-
-        self.setState({
-            firstNameMess: '',
-            lastNameMess: '',
-            ageMess: ''
-        });
-
+        
         var isOk = !(self.state.firstName === '' || self.state.lastName === '' || self.state.age === '');
 
         if (!isOk) {
 
             if (self.state.firstName === '') {
                 self.setState({
-                    firstNameMess: 'First Name is Empty!'
+                    errorFirstName: 'tooltip'
                 });
             }
 
             if (self.state.lastName === '') {
                 self.setState({
-                    lastNameMess: 'Last Name is Empty!'
+                    errorLastName: 'tooltip'
                 });
             }
 
             if (self.state.age === '') {
                 self.setState({
-                    ageMess: 'Age is Empty!'
+                    errorAge: 'tooltip'
                 });
             }
 
@@ -170,7 +164,10 @@
             lastName: student ? student.LastName : '',
             age: student ? student.Age : '',
             schoolId: student ? student.School.Id : (self.state.schools ? self.state.schools[0].Id : ''),
-            edit: student
+            edit: student,
+            errorFirstName: '',
+            errorLastName: '',
+            errorAge: '',
         });
 
 
@@ -184,14 +181,26 @@
 
     changeFirstName(event) {
         this.setState({ firstName: event.target.value });
+
+        if (event.target.value != '') {
+            self.setState({ errorFirstName: '' });
+        }
     }
 
     changeLastName(event) {
         this.setState({ lastName: event.target.value });
+
+        if (event.target.value != '') {
+            self.setState({ errorLastName: '' });
+        }
     }
 
     changeAge(event) {
         this.setState({ age: event.target.value });
+
+        if (event.target.value != '') {
+            self.setState({ errorAge: '' });
+        }
     }
 
     changeSchool(event) {
@@ -248,23 +257,26 @@
                             <div>
                                 <label>
                                     First name:
-                                    <input type='text' onChange={this.changeFirstName} value={this.state.firstName} placeholder='First name...' />
+                                    <span className={this.state.errorFirstName} data-title={this.state.firstNameMess}>
+                                        <input type='text' onChange={this.changeFirstName} value={this.state.firstName} placeholder='First name...' />
+                                    </span>
                                 </label>
-                                <p className='error-mess'>{this.state.firstNameMess}</p>
                             </div>
                             <div>
                                 <label>
                                     Last name:
-                                    <input type='text' onChange={this.changeLastName} value={this.state.lastName} placeholder='Last name...' />
+                                    <span className={this.state.errorLastName} data-title={this.state.lastNameMess}>
+                                        <input type='text' onChange={this.changeLastName} value={this.state.lastName} placeholder='Last name...' />
+                                    </span>
                                 </label>
-                                <p className='error-mess'>{this.state.lastNameMess}</p>
                             </div>
                             <div>
                                 <label>
                                     Age:
-                                    <input type='number' onChange={this.changeAge} value={this.state.age} placeholder='Age...' />
+                                    <span className={this.state.errorAge} data-title={this.state.ageMess}>
+                                        <input type='number' onChange={this.changeAge} value={this.state.age} placeholder='Age...' />
+                                    </span>
                                 </label>
-                                <p className='error-mess'>{this.state.ageMess}</p>
                             </div>
                             <div>
                                 <label>

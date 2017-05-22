@@ -1,7 +1,7 @@
 ﻿/*Basic structure*/
 .container {
     margin: auto;
-    width: 1000px;
+    max-width: 1000px;
 }
 
 .header {
@@ -127,6 +127,7 @@
 
 .background-pop-up-off {
     display: none;
+    visibility: hidden;
 }
 
 /*Other*/
@@ -165,4 +166,37 @@ input, select {
 @keyframes spin {
     0% { transform: translate(-50%, -50%) rotate(0deg); }
     100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/*TOOLTOIP*/
+.tooltip { 
+    display:block;
+    position:relative; 
+}
+
+.tooltip::after {
+    content: attr(data-title);
+	position:absolute;
+	display:block;
+	right: 0%;
+	bottom: 110%;
+    z-index: 1;
+    padding: 5px;
+    font-size: 18px;
+    
+	color: white;
+	background: rgba(255, 0, 0, 0.7);
+}
+
+.tooltip::before {
+    content: "";
+    position: absolute;
+    display: block;
+	right: 0%;
+	top: -10%;
+	z-index: 1;
+
+    border: solid;
+    border-color: rgba(255, 0, 0, 0.7) transparent;
+    border-width: 6px 6px 0 6px;
 }

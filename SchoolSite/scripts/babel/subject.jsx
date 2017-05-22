@@ -4,7 +4,7 @@
 
         this.state = {
             data: [],   count: 0,
-            title: '',  titleMess: '',
+            title: '', errorTitle: '', titleMess: 'Title is Empty!',
             loadPopUPClass: 'background-pop-up-off',
             inputPopUPClass: 'background-pop-up-off'
         };
@@ -28,14 +28,8 @@
     saveData() {
         self = this;
 
-        self.setState({
-            titleMess: ''
-        });
-
         if (self.state.title === "") {
-            self.setState({
-                titleMess: 'Title is Empty!'
-            });
+            self.setState({ errorTitle: 'tooltip' });
 
             return;
         }
@@ -111,7 +105,7 @@
     }
 
     setPopUPForm(subject) {
-        this.setState({ title: subject ? subject.Title : "", edit: subject });
+        this.setState({ title: subject ? subject.Title : "", edit: subject, errorTitle: '' });
 
         if (this.state.inputPopUPClass === 'background-pop-up-off') {
             this.setState({ inputPopUPClass: 'background-pop-up' });
@@ -123,6 +117,10 @@
 
     changeInputTitle(event) {
         this.setState({ title: event.target.value });
+
+        if (event.target.value != '') {
+            self.setState({ errorTitle: '' });
+        }
     }
 
     render() {
@@ -153,9 +151,10 @@
                      <div>
                          <label>
                              Title:
+                                <span className={this.state.errorTitle} data-title={this.state.titleMess}>
                                     <input type="text" onChange={this.changeInputTitle} value={this.state.title} placeholder="Enter the subject title..." />
-                         </label>
-                                <p className="error-mess">{this.state.titleMess}</p>
+                                </span>
+                            </label>
                      </div>
                      <hr />
                     <div>
