@@ -17,7 +17,7 @@ namespace SchoolSite.Services.Interfaces
         Subject GetSubject(int id);
         void Delete(int id);
         void Update(SubjectViewModel item);
-        Feed<SubjectViewModel> GetSubjectFeed(int take);
+        Feed<SubjectViewModel> GetSubjectFeed(int skip, int take);
         Feed<SubjectViewModel> GetSubjectFeed();
     }
 }

@@ -18,22 +18,21 @@ namespace SchoolSite.Controllers
             return View("subject");
         }
         
-        public ActionResult JSON_ALL_Subject()
+        public ActionResult GetSubjectOptions()
         {
-            return Json(subjectService.GetSubjectFeed(), JsonRequestBehavior.AllowGet);
+            var res = subjectService.GetSubjectFeed();
+            return Json(res, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult JSON_Subject(bool get = false, int count = 0)
+        public ActionResult GetSubject(int skip, int take = 0)
         {
-            if (get)
-                return Json(subjectService.GetSubjectFeed(count + 10), JsonRequestBehavior.AllowGet);
-            else
-                return Json(subjectService.GetSubjectFeed(count), JsonRequestBehavior.AllowGet);
+            var res = subjectService.GetSubjectFeed(skip, take < 0 ? 0 : take);
+            return Json(res, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult PostSubject(SubjectViewModel svm)
+        public ActionResult PostSubject(SubjectViewModel subjectViewModel)
         {
-            subjectService.Save(svm);
+            subjectService.Save(subjectViewModel);
             
             return Json(true, JsonRequestBehavior.AllowGet);
         }

@@ -63,10 +63,10 @@ namespace SchoolSite.Infrastructure.Business
             }
         }
 
-        public Feed<StudentViewModel> GetStudentFeed(int take)
+        public Feed<StudentViewModel> GetStudentFeed(int skip, int take)
         {
-            var res = unitOfWork.Students.Query().ToList().Select(x => mapp.Map<StudentViewModel>(x)).Take(take).ToList();
-            return new Feed<StudentViewModel>(res);
+            var res = unitOfWork.Students.Query().OrderBy(x => x.Id).Skip(skip).Take(take).ToList().Select(x => mapp.Map<StudentViewModel>(x)).ToList();
+            return new Feed<StudentViewModel>(res, skip);
         }
 
         public Feed<StudentViewModel> GetStudentFeed()

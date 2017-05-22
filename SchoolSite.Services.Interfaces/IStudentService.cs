@@ -18,7 +18,7 @@ namespace SchoolSite.Services.Interfaces
         Student GetStudent(int id);
         void Delete(int id);
         void Update(StudentCreateUpdateModel item);
-        Feed<StudentViewModel> GetStudentFeed(int take);
+        Feed<StudentViewModel> GetStudentFeed(int skip, int take);
         Feed<StudentViewModel> GetStudentFeed();
     }
 }

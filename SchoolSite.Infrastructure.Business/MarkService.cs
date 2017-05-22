@@ -39,10 +39,10 @@ namespace SchoolSite.Infrastructure.Business
             return res;
         }
 
-        public Feed<MarkViewModel> GetMarkFeed(int take)
+        public Feed<MarkViewModel> GetMarkFeed(int skip, int take)
         {
-            var res = unitOfWork.Marks.Query().ToList().Select(x => mapp.Map<MarkViewModel>(x)).Take(take).ToList();
-            return new Feed<MarkViewModel>(res);
+            var res = unitOfWork.Marks.Query().OrderBy(x => x.Id).Skip(skip).Take(take).ToList().Select(x => mapp.Map<MarkViewModel>(x)).ToList();
+            return new Feed<MarkViewModel>(res, skip);
         }
 
         public Feed<MarkViewModel> GetMarkFeed()

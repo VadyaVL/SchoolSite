@@ -16,7 +16,7 @@ namespace SchoolSite.Services.Interfaces
         void Save(MarkCreateUpdateModel item);
         void Delete(int id);
         void Update(MarkCreateUpdateModel item);
-        Feed<MarkViewModel> GetMarkFeed(int take);
+        Feed<MarkViewModel> GetMarkFeed(int skip, int take);
         Feed<MarkViewModel> GetMarkFeed();
     }
 }

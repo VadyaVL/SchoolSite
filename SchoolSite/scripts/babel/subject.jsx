@@ -3,22 +3,27 @@
         super(props);
 
         this.state = {
-            data: [],
+            data: [],   // Дані
+            count: 0,   // Наявна кількість
             title: '',
-            statePopUP: "invisible-pop-up",
             titleMess: '',
-            parentPopUp: ""
+            popupClassName: 'invisible-pop-up', // назва попапу - покищо....
+            popupParentClassName: '' // назва батька попапу - покищо....
         };
 
         this.saveData = this.saveData.bind(this);
         this.removeData = this.removeData.bind(this);
 
-        this.getRows = this.getRows.bind(this);
-        this.changeStatePopUP = this.changeStatePopUP.bind(this);
+        this.changePopUpState = this.changePopUpState.bind(this);
         this.updateDataOnPage = this.updateDataOnPage.bind(this);
         this.changeInputTitle = this.changeInputTitle.bind(this);
+        this.setLoadAnim = this.setLoadAnim.bind(this);
 
-        this.updateDataOnPage(true);
+        this.updateDataOnPage(feed.DEFAULT_TAKE);
+    }
+
+    setLoadAnim(enable) {
+        this.setState({ loadPopUPClass: enable ? 'background-pop-up' : 'background-pop-up-off' });
     }
 
     saveData() {
@@ -42,29 +47,53 @@
                             Title: self.state.title
                         },
                         function () {
-                            if (self.state.count % 10 != 0 || self.state.count == 0) {
-                                self.setState({
-                                    count: self.state.count + 1
-                                });
+                            if (self.state.edit) {
+                                self.state.edit.Title = self.state.title;
                             }
-                            self.updateDataOnPage();
-                            self.changeStatePopUP();
+
+                            self.updateDataOnPage(1);
+                            self.changePopUpState();
                         });
     }
 
-    updateDataOnPage(toLoad) {
+    updateDataOnPage(take) {
         self = this;
-        ajax.callAjax("/Subject/JSON_Subject",
+        this.setLoadAnim(true);
+        var skip = (take >= 0 ? this.state.count : this.state.count + take);
+
+        if (skip != 0 && skip % feed.DEFAULT_TAKE == 0 &&
+            take != feed.DEFAULT_TAKE && take != feed.DEFAULT_REMOVE) {
+            self.setLoadAnim(false);
+            return;
+        }
+
+        if (take == feed.DEFAULT_REMOVE) {
+            take = feed.DEFAULT_TAKE - skip % feed.DEFAULT_TAKE;
+        }
+
+        ajax.callAjax("/Subject/GetSubject",
                         {
-    get: Boolean(toLoad),
-                            count: self.state.count
+                            skip: skip,
+                            take: take
                         },
                         function (data) {
                             var jsonObj = JSON.parse(data);
+                            var t = [];
+                            if (skip == 0) {
+                                var t = jsonObj.Items;
+                            }
+                            else {
+                                var t = self.state.data.concat(jsonObj.Items);
+                            }
+
                             self.setState({
                                 count: jsonObj.Count,
-                                data: jsonObj.Items
+                                data: t
                             });
+                            self.setLoadAnim(false);
+                        },
+                        function () {
+                            self.setLoadAnim(false);
                         });
     }
 
@@ -75,18 +104,20 @@
                             id: subject.Id
                         },
                         function () {
-                            self.updateDataOnPage();
+                            var position = self.state.data.indexOf(subject);
+                            self.state.data.splice(position, 1);
+                            self.updateDataOnPage(feed.DEFAULT_REMOVE);
                         });
     }
 
-    changeStatePopUP(subject) {
+    changePopUpState(subject) {
         this.setState({ title: subject ? subject.Title : "", edit: subject });
 
-        if (this.state.statePopUP === "invisible-pop-up") {
-            this.setState({ statePopUP: "visible-pop-up", parentPopUp: "background-pop-up" });
+        if (this.state.popupClassName === "invisible-pop-up") {
+            this.setState({ popupClassName: "visible-pop-up", popupParentClassName: "background-pop-up" });
         }
         else {
-            this.setState({ statePopUP: "invisible-pop-up", parentPopUp: "" });
+            this.setState({ popupClassName: "invisible-pop-up", popupParentClassName: "" });
         }
     }
 
@@ -94,22 +125,12 @@
         this.setState({ title: event.target.value });
     }
 
-    getRows(subjects) {
-        return subjects.map((subject) =>
-            <div className="div-row" key={subject.Id}>
-                <div className="div-col-num">{subject.Id}</div>
-                <div className="div-col">{subject.Title}</div>
-                <div className="div-col-btn"><button className="btn-edit" onClick={() => this.changeStatePopUP(subject)}>Edit</button></div>
-                <div className="div-col-btn"><button className="btn-remove" onClick={() => this.removeData(subject)}>Remove</button></div>
-            </div>
-        );
-    }
-
     render() {
         return (
             <div className="contentFromReact">
+                <PopUP state={this.state.loadPopUPClass} />
                 <div>
-                    <button className="btn-add" onClick={() => this.changeStatePopUP()}>Add Subject</button>
+                    <button className="btn-add" onClick={() => this.changePopUpState()}>Add Subject</button>
                 </div>
                <div className="div-table">
                     <div className="div-row-head">
@@ -118,31 +139,51 @@
                         <div className="div-col-btn"></div>
                         <div className="div-col-btn"></div>
                     </div>
-                   {this.getRows(this.state.data)}
+                   {this.state.data.map((subject) => <TableItem key={subject.Id} subject={subject } edit={self.changePopUpState} remove={self.removeData}  />)}
                </div>
 
             <div>
-                <button className="btn-add" onClick={() => this.updateDataOnPage(true)}>See more</button>
+                <button className="btn-add" onClick={() => this.updateDataOnPage(feed.DEFAULT_TAKE)}>See more</button>
             </div>
 
-                <div className={this.state.parentPopUp}>
-         <div className={this.state.statePopUP}>
+                <div className={this.state.popupParentClassName}>
+         <div className={this.state.popupClassName}>
                  <form className="input-form">
                      <div>
                          <label>
                              Title:
                                     <input type="text" onChange={this.changeInputTitle} value={this.state.title} placeholder="Enter the subject title..." />
                          </label>
-                                <p className="errorMess">{this.state.titleMess}</p>
+                                <p className="error-mess">{this.state.titleMess}</p>
                      </div><hr />
                             <div>
                                 <button type="button" className="btn-save" onClick={() => this.saveData()}>Save</button>
-                                <button type="button" className="btn-cancel" onClick={() => this.changeStatePopUP()}>Cancel</button>
+                                <button type="button" className="btn-cancel" onClick={() => this.changePopUpState()}>Cancel</button>
                             </div>
                  </form>
          </div>
                 </div>
                 </div>
+        );
+    }
+}
+
+class TableItem extends React.Component{
+    constructor(props){
+        super(props);
+    }
+
+    render() {
+        var subject = this.props.subject;
+        var edit = this.props.edit;
+        var remove = this.props.remove;
+        return (
+            <div className="div-row">
+                <div className="div-col-num">{subject.Id}</div>
+                <div className="div-col">{subject.Title}</div>
+                <div className="div-col-btn"><button className="btn-edit" onClick={() => edit(subject)}>Edit</button></div>
+                <div className="div-col-btn"><button className="btn-remove" onClick={() => remove(subject)}>Remove</button></div>
+            </div>
         );
     }
 }

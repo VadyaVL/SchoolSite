@@ -3,20 +3,21 @@
         super(props);
 
         this.state = {
-            data: [],
+            data: [],   // Дані
+            count: 0,   // Наявна кількість
             schools: [],
             firstName: '',
             lastName: '',
             age: '',
-            schoolId: '',
-            statePopUP: 'invisible-pop-up',
             firstNameMess: '',
             lastNameMess: '',
             ageMess: '',
-            parentPopUp: ''
+            schoolId: '',
+            popupClassName: 'invisible-pop-up', // назва попапу - покищо....
+            popupParentClassName: '' // назва батька попапу - покищо....
         };
 
-        ajax.callAjax('/School/JSON_ALL_School',
+        ajax.callAjax('/School/GetSchoolOptions',
                         {},
                         function (data) {
                             self.setState({
@@ -28,18 +29,22 @@
         this.saveData = this.saveData.bind(this);
         this.removeData = this.removeData.bind(this);
 
-        this.getRows = this.getRows.bind(this);
         this.initComboBox = this.initComboBox.bind(this);
-        this.changeStatePopUP = this.changeStatePopUP.bind(this);
-        this.updateDataOnPage = this.updateDataOnPage.bind(this);
 
+        this.changePopUpState = this.changePopUpState.bind(this);
+        this.updateDataOnPage = this.updateDataOnPage.bind(this);
         this.changeFirstName = this.changeFirstName.bind(this);
         this.changeLastName = this.changeLastName.bind(this);
         this.changeAge = this.changeAge.bind(this);
         this.changeSchool = this.changeSchool.bind(this);
         this.changeSubjects = this.changeSubjects.bind(this);
+        this.setLoadAnim = this.setLoadAnim.bind(this);
 
-        this.updateDataOnPage(true);
+        this.updateDataOnPage(feed.DEFAULT_TAKE);
+    }
+
+    setLoadAnim(enable) {
+        this.setState({ loadPopUPClass: enable ? 'background-pop-up' : 'background-pop-up-off' });
     }
 
     saveData() {
@@ -85,29 +90,65 @@
                             SchoolId: self.state.schoolId
                         },
                         function () {
-                            if (self.state.count % 10 != 0 || self.state.count == 0) {
-                                self.setState({
-                                    count: self.state.count + 1
-                                });
+                            if (self.state.edit) {
+                                self.state.edit.FirstName = self.state.firstName;
+                                self.state.edit.LastName = self.state.lastName;
+                                self.state.edit.Age = self.state.age;
+
+                                var len = self.state.schools.length;
+
+                                for (var i = 0; i < len; i++) {
+                                    if (self.state.schools[i].Id == self.state.schoolId) {
+                                        self.state.edit.School = self.state.schools[i];
+                                        break;
+                                    }
+                                }
+
                             }
-                            self.updateDataOnPage();
-                            self.changeStatePopUP();
+                            self.updateDataOnPage(1);
+                            self.changePopUpState();
                         });
     }
 
-    updateDataOnPage(toLoad) {
+    updateDataOnPage(take) {
+
         self = this;
-        ajax.callAjax('/Student/JSON_Student',
+        this.setLoadAnim(true);
+        var skip = (take >= 0 ? this.state.count : this.state.count + take);
+
+        if (skip != 0 && skip % feed.DEFAULT_TAKE == 0 &&
+            take != feed.DEFAULT_TAKE && take != feed.DEFAULT_REMOVE) {
+            self.setLoadAnim(false);
+            return;
+        }
+
+        if (take == feed.DEFAULT_REMOVE) {
+            take = feed.DEFAULT_TAKE - skip % feed.DEFAULT_TAKE;
+        }
+
+        ajax.callAjax('/Student/GetStudent',
                         {
-                            get: Boolean(toLoad),
-                            count: self.state.count
+                            skip: skip,
+                            take: take
                         },
                         function (data) {
                             var jsonObj = JSON.parse(data);
+                            var t = [];
+                            if (skip == 0) {
+                                var t = jsonObj.Items;
+                            }
+                            else {
+                                var t = self.state.data.concat(jsonObj.Items);
+                            }
+
                             self.setState({
                                 count: jsonObj.Count,
-                                data: jsonObj.Items
+                                data: t
                             });
+                            self.setLoadAnim(false);
+                        },
+                        function () {
+                            self.setLoadAnim(false);
                         });
     }
 
@@ -118,11 +159,13 @@
                             id: student.Id
                         },
                         function () {
-                            self.updateDataOnPage();
+                            var position = self.state.data.indexOf(student);
+                            self.state.data.splice(position, 1);
+                            self.updateDataOnPage(feed.DEFAULT_REMOVE);
                         });
     }
 
-    changeStatePopUP(student) {
+    changePopUpState(student) {
         self = this;
 
         this.setState({
@@ -134,11 +177,11 @@
         });
 
 
-        if (this.state.statePopUP === 'invisible-pop-up') {
-            this.setState({ statePopUP: 'visible-pop-up', parentPopUp: 'background-pop-up' });
+        if (this.state.popupClassName === 'invisible-pop-up') {
+            this.setState({ popupClassName: 'visible-pop-up', popupParentClassName: 'background-pop-up' });
         }
         else {
-            this.setState({ statePopUP: 'invisible-pop-up', parentPopUp: '' });
+            this.setState({ popupClassName: 'invisible-pop-up', popupParentClassName: '' });
         }
     }
 
@@ -171,20 +214,6 @@
         this.setState({ selected_subjects: value });
     }
 
-    getRows(students) {
-        return students.map((student) =>
-            <div className='div-row' key={student.Id}>
-                <div className='div-col-num'>{student.Id}</div>
-                <div className='div-col'>{student.FirstName}</div>
-                <div className='div-col'>{student.LastName}</div>
-                <div className='div-col-num'>{student.Age}</div>
-                <div className='div-col'>{student.School.Name}</div>
-                <div className='div-col-btn'><button className='btn-edit' onClick={() => this.changeStatePopUP(student)}>Edit</button></div>
-                <div className='div-col-btn'><button className='btn-remove' onClick={() => this.removeData(student)}>Remove</button></div>
-            </div>
-        );
-    }
-
     initComboBox() {
         return this.state.schools.map((school) =>
             <option key={school.Id} value={school.Id}>{school.Name}</option>
@@ -194,8 +223,9 @@
     render() {
         return (
             <div className='contentFromReact'>
+                <PopUP state={this.state.loadPopUPClass} />
                 <div>
-                    <button className='btn-add' onClick={() => this.changeStatePopUP()}>Add Student</button>
+                    <button className='btn-add' onClick={() => this.changePopUpState()}>Add Student</button>
                 </div>
                <div className='div-table'>
                     <div className='div-row-head'>
@@ -207,14 +237,14 @@
                         <div className='div-col-btn'></div>
                         <div className='div-col-btn'></div>
                     </div>
-                   {this.getRows(this.state.data)}
+                   {this.state.data.map((student) => <TableItem key={student.Id} student={student} edit={self.changePopUpState} remove={self.removeData}  />)}
                </div>
         <div>
-            <button className='btn-add' onClick={() => this.updateDataOnPage(true)}>See more</button>
+            <button className='btn-add' onClick={() => this.updateDataOnPage(feed.DEFAULT_TAKE)}>See more</button>
         </div>
 
-        <div className={this.state.parentPopUp}>
-         <div className={this.state.statePopUP}>
+        <div className={this.state.popupParentClassName}>
+         <div className={this.state.popupClassName}>
                  <form className='input-form'>
                          <div>
                              <div>
@@ -222,21 +252,21 @@
                                     First name:
                                     <input type='text' onChange={this.changeFirstName} value={this.state.firstName} placeholder='First name...' />
                                 </label>
-                                 <p className='errorMess'>{this.state.firstNameMess}</p>
+                                 <p className='error-mess'>{this.state.firstNameMess}</p>
                              </div>
                              <div>
                                 <label>
                                     Last name:
                                     <input type='text' onChange={this.changeLastName} value={this.state.lastName} placeholder='Last name...' />
                                 </label>
-                                 <p className='errorMess'>{this.state.lastNameMess}</p>
+                                 <p className='error-mess'>{this.state.lastNameMess}</p>
                              </div>
                              <div>
                                 <label>
                                     Age:
                                     <input type='number' onChange={this.changeAge} value={this.state.age} placeholder='Age...' />
                                 </label>
-                                 <p className='errorMess'>{this.state.ageMess}</p>
+                                 <p className='error-mess'>{this.state.ageMess}</p>
                              </div>
                              <div>
                                 <label>
@@ -250,12 +280,35 @@
                     <hr />
                     <div>
                         <button type='button' className='btn-save' onClick={() => this.saveData()}>Save</button>
-                        <button type='button' className='btn-cancel' onClick={() => this.changeStatePopUP()}>Cancel</button>
+                        <button type='button' className='btn-cancel' onClick={() => this.changePopUpState()}>Cancel</button>
                     </div>
                  </form>
          </div>
         </div>
         </div>
+        );
+    }
+}
+
+class TableItem extends React.Component{
+    constructor(props){
+        super(props);
+    }
+
+    render() {
+        var student = this.props.student;
+        var edit = this.props.edit;
+        var remove = this.props.remove;
+        return (
+            <div className='div-row'>
+                <div className='div-col-num'>{student.Id}</div>
+                <div className='div-col'>{student.FirstName}</div>
+                <div className='div-col'>{student.LastName}</div>
+                <div className='div-col-num'>{student.Age}</div>
+                <div className='div-col'>{student.School.Name}</div>
+                <div className='div-col-btn'><button className='btn-edit' onClick={() => edit(student)}>Edit</button></div>
+                <div className='div-col-btn'><button className='btn-remove' onClick={() => remove(student)}>Remove</button></div>
+            </div>
         );
     }
 }

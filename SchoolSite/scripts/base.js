@@ -1,6 +1,6 @@
 ﻿var ajax = {
 
-    callAjax(url, data, success) {//call
+    callAjax(url, data, success, error) {
         $.post({
             url: url,
             type: "POST",
@@ -8,8 +8,14 @@
             format: "json",
             traditional: true,
             data: data,
-            success: success
+            success: success,
+            error: error
         });
     }
 
+}
+
+var feed=  {
+    DEFAULT_TAKE: 10,
+    DEFAULT_REMOVE: -1,
 }

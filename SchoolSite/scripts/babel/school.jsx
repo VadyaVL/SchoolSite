@@ -7,6 +7,7 @@
             count: 0,
             name: '',
             nameMess: '',
+            loadPopUPClass: 'background-pop-up-off',
             popupClassName: 'invisible-pop-up',
             popupParentClassName: ''
         };
@@ -14,30 +15,23 @@
         this.saveData = this.saveData.bind(this);
         this.removeData = this.removeData.bind(this);
 
-
-        this.getRows = this.getRows.bind(this);
-
-
         this.changePopUpState = this.changePopUpState.bind(this);
-        this.updateDataOnPage = this.updateDataOnPage.bind(this);
 
+        this.updateDataOnPage = this.updateDataOnPage.bind(this);
+        this.setLoadAnim = this.setLoadAnim.bind(this);
         this.changeInputName = this.changeInputName.bind(this);
 
-        this.updateDataOnPage(0);
+        this.updateDataOnPage(feed.DEFAULT_TAKE);
     }
+
+    
 
     saveData() {
         self = this;
-
-        self.setState({
-            nameMess: ''
-        });
+        self.setState({  nameMess: '' });
 
         if (self.state.name === '') {
-            self.setState({
-                nameMess: 'Name is Empty!'
-            });
-
+            self.setState({ nameMess: 'Name is Empty!' });
             return;
         }
 
@@ -47,22 +41,35 @@
                             Name: self.state.name
                         },
                         function () {
-                            if (self.state.count % 10 != 0 || self.state.count == 0) {
-                                self.setState({
-                                    count: self.state.count + 1
-                                });
+                            if (self.state.edit) {
+                                self.state.edit.Name = self.state.name;
                             }
-                            self.updateDataOnPage(0);
+
+                            self.updateDataOnPage(1);
                             self.changePopUpState();
                         });
     }
 
-    updateDataOnPage() {
+    updateDataOnPage(take) {
         self = this;
-        var skip = this.state.count;
-        ajax.callAjax('/School/JSON_School',
+        this.setLoadAnim(true);
+        
+        var skip = (take >= 0 ? this.state.count : this.state.count + take);
+
+        if (skip != 0 && skip % feed.DEFAULT_TAKE == 0 &&
+            take != feed.DEFAULT_TAKE && take != feed.DEFAULT_REMOVE) {
+            self.setLoadAnim(false);
+            return;
+        }
+
+        if (take == feed.DEFAULT_REMOVE) {
+            take = feed.DEFAULT_TAKE - skip % feed.DEFAULT_TAKE;
+        }
+
+        ajax.callAjax('/School/GetSchool',
                         {
                             skip: skip,
+                            take: take
                         },
                         function (data) {
                             var jsonObj = JSON.parse(data);
@@ -78,7 +85,15 @@
                                 count: jsonObj.Count,
                                 data: t
                             });
+                            self.setLoadAnim(false);
+                        },
+                        function () {
+                            self.setLoadAnim(false);
                         });
+    }
+
+    setLoadAnim(enable) {
+        this.setState({ loadPopUPClass: enable ? 'background-pop-up' : 'background-pop-up-off' });
     }
 
     removeData(school) {
@@ -88,7 +103,9 @@
                             id: school.Id
                         },
                         function () {
-                            self.updateDataOnPage();
+                            var position = self.state.data.indexOf(school);
+                            self.state.data.splice(position, 1);
+                            self.updateDataOnPage(feed.DEFAULT_REMOVE);
                         });
     }
 
@@ -107,22 +124,12 @@
         this.setState({ name: event.target.value });
     }
 
-    getRows(schools) {
-        return schools.map((school) =>
-                        <div className='div-row' key={school.Id}>
-                        <div className='div-col-num'>{school.Id}</div>
-                        <div className='div-col'>{school.Name}</div>
-                        <div className='div-col-btn'><button className='btn-edit' onClick={() => this.changePopUpState(school)}>Edit</button></div>
-                        <div className='div-col-btn'><button className='btn-remove' onClick={() => this.removeData(school)}>Remove</button></div>
-            </div>
-        );
-    }
-
     render() {
         self = this;
        
         return (
             <div className='contentFromReact'>
+                <PopUP state={this.state.loadPopUPClass} />
                 <div>
                     <button className='btn-add' onClick={() => this.changePopUpState()}>Add School</button>
                 </div>
@@ -134,13 +141,14 @@
                         <div className='div-col-btn'></div>
                         <div className='div-col-btn'></div>
                     </div>
-                   {this.getRows(this.state.data)}
+                   {this.state.data.map((school) => <TableItem key={school.Id} school={school} edit={self.changePopUpState} remove={self.removeData} />)}
                </div>
 
                 <div>
-                    <button className='btn-more' onClick={() => this.updateDataOnPage()}>See more</button>
+                    <button className='btn-more' onClick={() => this.updateDataOnPage(feed.DEFAULT_TAKE)}>See more</button>
                 </div>
                 
+
                 <div className={this.state.popupParentClassName}>{/*class* {this.STARTE.OPENEDPOPUP ? */}
                     <div className={this.state.popupClassName}>
                             <form className='input-form'>
@@ -149,7 +157,7 @@
                                         Name:
                                         <input type='text' onChange={this.changeInputName} value={this.state.name} placeholder='Enter the school name...' />
                                     </label>
-                                    <p className='errorMess'>{this.state.nameMess}</p>
+                                    <p className='error-mess'>{this.state.nameMess}</p>
                                 </div><hr />
                                 <div>
                                     <button type='button' className='btn-save' onClick={() => this.saveData()}>Save</button>
@@ -158,6 +166,26 @@
                             </form>
                     </div>
                 </div> 
+            </div>
+        );
+    }
+}
+
+class TableItem extends React.Component{
+    constructor(props){
+        super(props);
+    }
+
+    render() {
+        var school = this.props.school;
+        var edit = this.props.edit;
+        var remove = this.props.remove;
+        return (
+            <div className='div-row'>
+                <div className='div-col-num'>{school.Id}</div>
+                <div className='div-col'>{school.Name}</div>
+                <div className='div-col-btn'><button className='btn-edit' onClick={() => edit(school)}>Edit</button></div>
+                <div className='div-col-btn'><button className='btn-remove' onClick={() => remove(school)}>Remove</button></div>
             </div>
         );
     }

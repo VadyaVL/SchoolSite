@@ -434,6 +434,7 @@
     <Content Include="scripts\babel\student.jsx" />
     <Content Include="Views\Mark\Mark.cshtml" />
     <Content Include="scripts\babel\mark.jsx" />
+    <Content Include="scripts\babel\main.jsx" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

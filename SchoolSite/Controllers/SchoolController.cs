@@ -18,30 +18,27 @@ namespace SchoolSite.Controllers
             return View("school");
         }
 
-        public ActionResult JSON_ALL_School()//GetSchoolOptions
+        public ActionResult GetSchoolOptions()
         {
             var res = schoolService.GetSchoolFeed();
             return Json(res, JsonRequestBehavior.AllowGet);
         }
-
-        // Get 
-        public ActionResult JSON_School(int skip)//GetSchool
+        
+        public ActionResult GetSchool(int skip, int take)
         {
-            var res = schoolService.GetSchoolFeed(skip, 10);
+            var res = schoolService.GetSchoolFeed(skip, take < 0 ? 0 : take);
             return Json(res, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult PostSchool(SchoolViewModel dto)
         {
             schoolService.Save(dto);
-            
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult RemoveSchool(int id)
         {
             schoolService.Delete(id);
-            
             return Json(true, JsonRequestBehavior.AllowGet);
         }
     }

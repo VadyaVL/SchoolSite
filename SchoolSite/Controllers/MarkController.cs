@@ -22,13 +22,11 @@ namespace SchoolSite.Controllers
         {
             return View("mark");
         }
-
-        public ActionResult JSON_Mark(bool get = false, int count = 0)
+        
+        public ActionResult GetMark(int skip, int take)
         {
-            if (get)
-                return Json(markService.GetMarkFeed(count + 10), JsonRequestBehavior.AllowGet);
-            else
-                return Json(markService.GetMarkFeed(count), JsonRequestBehavior.AllowGet);
+            var res = markService.GetMarkFeed(skip, take < 0 ? 0 : take);
+            return Json(res, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult PostMark(MarkCreateUpdateModel markCUM)

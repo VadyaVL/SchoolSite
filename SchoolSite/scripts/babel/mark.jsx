@@ -3,8 +3,8 @@
         super(props);
 
         this.state = {
-            data: [],
-            count: 0,
+            data: [],   // Дані
+            count: 0,   // Наявна кількість
             students: [],
             subjects: [],
             student: '',
@@ -15,7 +15,7 @@
             popupParentClassName: ''
         };
 
-        ajax.callAjax('/Student/JSON_ALL_Student', {},
+        ajax.callAjax('/Student/GetStudentOptions', {},
                         function (data) {
                             self.setState({
                                 students: JSON.parse(data).Items,
@@ -23,7 +23,7 @@
                             });
                         });
 
-        ajax.callAjax('/Subject/JSON_ALL_Subject', {},
+        ajax.callAjax('/Subject/GetSubjectOptions', {},
                         function (data) {
                             self.setState({
                                 subjects: JSON.parse(data).Items,
@@ -40,12 +40,17 @@
 
         this.changePopUpState = this.changePopUpState.bind(this);
         this.updateDataOnPage = this.updateDataOnPage.bind(this);
+        this.setLoadAnim = this.setLoadAnim.bind(this);
 
         this.changeValue = this.changeValue.bind(this);
         this.changeStudent = this.changeStudent.bind(this);
         this.changeSubject = this.changeSubject.bind(this);
 
-        this.updateDataOnPage(true);
+        this.updateDataOnPage(feed.DEFAULT_TAKE);
+    }
+
+    setLoadAnim(enable) {
+        this.setState({ loadPopUPClass: enable ? 'background-pop-up' : 'background-pop-up-off' });
     }
 
     saveData() {
@@ -76,29 +81,71 @@
                             Value: self.state.value,
                         },
                         function () {
-                            if (self.state.count % 10 != 0 || self.state.count == 0) {
-                                self.setState({
-                                    count: self.state.count + 1
-                                });
+
+                            if (self.state.edit) {
+                                var len = self.state.students.length;
+                                for (var i = 0; i < len; i++) {
+                                    if (self.state.students[i].Id == self.state.student) {
+                                        self.state.edit.Student = self.state.students[i];
+                                        break;
+                                    }
+                                }
+
+                                len = self.state.subjects.length;
+                                for (var i = 0; i < len; i++) {
+                                    if (self.state.subjects[i].Id == self.state.subject) {
+                                        self.state.edit.Subject = self.state.subjects[i];
+                                        break;
+                                    }
+                                }
+
+                                self.state.edit.Value = self.state.value;
                             }
-                            self.updateDataOnPage();
+
+                            self.updateDataOnPage(1);
                             self.changePopUpState();
                         });
     }
 
-    updateDataOnPage(toLoad) {
+    updateDataOnPage(take) {
+
         self = this;
-        ajax.callAjax('/Mark/JSON_Mark',
+        this.setLoadAnim(true);
+        var skip = (take >= 0 ? this.state.count : this.state.count + take);
+
+        if (skip != 0 && skip % feed.DEFAULT_TAKE == 0 &&
+            take != feed.DEFAULT_TAKE && take != feed.DEFAULT_REMOVE) {
+            self.setLoadAnim(false);
+            return;
+        }
+
+        if (take == feed.DEFAULT_REMOVE) {
+            take = feed.DEFAULT_TAKE - skip % feed.DEFAULT_TAKE;
+        }
+
+        ajax.callAjax('/Mark/GetMark',
                         {
-                            get: Boolean(toLoad),
-                            count: self.state.count
+                            skip: skip,
+                            take: take
                         },
                         function (data) {
                             var jsonObj = JSON.parse(data);
+                            var t = [];
+                            if (skip == 0) {
+                                var t = jsonObj.Items;
+                            }
+                            else {
+                                var t = self.state.data.concat(jsonObj.Items);
+                            }
+
                             self.setState({
                                 count: jsonObj.Count,
-                                data: jsonObj.Items
+                                data: t
                             });
+                            self.setLoadAnim(false);
+                        },
+                        function () {
+                            self.setLoadAnim(false);
                         });
     }
 
@@ -109,7 +156,9 @@
                             id: mark.Id
                         },
                         function () {
-                            self.updateDataOnPage();
+                            var position = self.state.data.indexOf(mark);
+                            self.state.data.splice(position, 1);
+                            self.updateDataOnPage(feed.DEFAULT_REMOVE);
                         });
     }
 
@@ -150,7 +199,7 @@
 
     initRows(marks) {
         return marks.map((mark) =>
-            <div className='div-row' key={mark.Id}>
+            <div className='div-row'>
                 <div className='div-col-num'>{mark.Id}</div>
                 <div className='div-col'>{mark.Student.LastName + ' ' + mark.Student.FirstName}</div>
                 <div className='div-col'>{mark.Subject.Title}</div>
@@ -176,6 +225,7 @@
     render() {
         return (
         <div className='contentFromReact'>
+            <PopUP state={this.state.loadPopUPClass} />
             <div>
                 <button className='btn-add' onClick={() => this.changePopUpState()}>Add Mark</button>
             </div>
@@ -188,12 +238,12 @@
                     <div className='div-col-num'>Mark</div>
                     <div className='div-col-btn'></div>
                     <div className='div-col-btn'></div>
-                </div>
-                {this.initRows(this.state.data)}
+                </div>                
+                {this.state.data.map((mark) => <TableItem key={mark.Id} mark={mark} edit={self.changePopUpState} remove={self.removeData} />)}
             </div>
 
             <div>
-                <button className='btn-add ' onClick={() => this.updateDataOnPage(true)}>See more</button>
+                <button className='btn-add ' onClick={() => this.updateDataOnPage(feed.DEFAULT_TAKE)}>See more</button>
             </div>
 
             <div className={this.state.popupParentClassName}>
@@ -222,7 +272,7 @@
                                 Mark:
                                 <input type='number' onChange={this.changeValue} value={this.state.value} placeholder='Set mark...' />
                             </label>
-                            <p className='errorMess'>{this.state.valueMess}</p>
+                            <p className='error-mess'>{this.state.valueMess}</p>
                         </div><hr />
 
                         <div>
@@ -233,6 +283,28 @@
                 </div>
             </div>
         </div>
+        );
+    }
+}
+
+class TableItem extends React.Component{
+    constructor(props){
+        super(props);
+    }
+
+    render() {
+        var mark = this.props.mark;
+        var edit = this.props.edit;
+        var remove = this.props.remove;
+        return (
+            <div className='div-row'>
+                <div className='div-col-num'>{mark.Id}</div>
+                <div className='div-col'>{mark.Student.LastName + ' ' + mark.Student.FirstName}</div>
+                <div className='div-col'>{mark.Subject.Title}</div>
+                <div className='div-col-num'>{mark.Value}</div>
+                <div className='div-col-btn'><button className='btn-edit' onClick={() => edit(mark)}>Edit</button></div>
+                <div className='div-col-btn'><button className='btn-remove' onClick={() => remove(mark)}>Remove</button></div>
+            </div>
         );
     }
 }

@@ -21,17 +21,16 @@ namespace SchoolSite.Controllers
             return View("Student");
         }
 
-        public ActionResult JSON_ALL_Student()
+        public ActionResult GetStudentOptions()
         {
-            return Json(studentService.GetStudentFeed(), JsonRequestBehavior.AllowGet);
+            var res = studentService.GetStudentFeed();
+            return Json(res, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult JSON_Student(bool get = false, int count = 0)
+        public ActionResult GetStudent(int skip, int take = 0)
         {
-            if (get)
-                return Json(studentService.GetStudentFeed(count + 10), JsonRequestBehavior.AllowGet);
-            else
-                return Json(studentService.GetStudentFeed(count), JsonRequestBehavior.AllowGet);
+            var res = studentService.GetStudentFeed(skip, take < 0 ? 0 : take);
+            return Json(res, JsonRequestBehavior.AllowGet);
         }
         
         public ActionResult PostStudent(StudentCreateUpdateModel studentCUM)
