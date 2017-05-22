@@ -103,7 +103,7 @@
 }
 
 /*PopUP*/
-.visible-pop-up, .invisible-pop-up {
+.pop-up-form {
     position: absolute;
     margin: auto;
     background: #eeeeee;
@@ -112,6 +112,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    visibility: visible;
 }
 
 .background-pop-up {
@@ -126,15 +127,6 @@
 
 .background-pop-up-off {
     display: none;
-}
-
-.visible-pop-up {
-    float: left;
-    visibility: visible;
-}
-
-.invisible-pop-up {
-    visibility: hidden;
 }
 
 /*Other*/

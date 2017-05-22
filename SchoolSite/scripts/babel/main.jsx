@@ -1,10 +1,30 @@
-﻿function PopUP(props) {
-    return (
-            <div className={props.state}>
+﻿class PopUPLoader extends React.Component{
+    constructor(props){
+        super(props);
+    }
+
+    render() {
+        return (
+            <div className={this.props.state}>
                     <div className="loader">
                     </div>
             </div>
         );
+    }
 }
 
-//ReactDOM.render(<PopUP />, document.getElementById('content'));
+class PopUP extends React.Component{
+    constructor(props){
+        super(props);
+    }
+
+    render() {
+        return (
+            <div className={this.props.state}>
+                 <div className="pop-up-form">
+                    {this.props.children}
+                 </div>
+            </div>
+        );
+    }
+}

@@ -3,28 +3,23 @@
         super(props);
 
         this.state = {
-            data: [],
-            count: 0,
-            name: '',
-            nameMess: '',
+            data: [],   count: 0,
+            name: '',   nameMess: '',
             loadPopUPClass: 'background-pop-up-off',
-            popupClassName: 'invisible-pop-up',
-            popupParentClassName: ''
+            inputPopUPClass: 'background-pop-up-off'
         };
 
         this.saveData = this.saveData.bind(this);
         this.removeData = this.removeData.bind(this);
 
-        this.changePopUpState = this.changePopUpState.bind(this);
+        this.updatePageData = this.updatePageData.bind(this);
+        this.setPopUPForm = this.setPopUPForm.bind(this);
+        this.setPopUPAnim = this.setPopUPAnim.bind(this);
 
-        this.updateDataOnPage = this.updateDataOnPage.bind(this);
-        this.setLoadAnim = this.setLoadAnim.bind(this);
         this.changeInputName = this.changeInputName.bind(this);
 
-        this.updateDataOnPage(feed.DEFAULT_TAKE);
+        this.updatePageData(feed.DEFAULT_TAKE);
     }
-
-    
 
     saveData() {
         self = this;
@@ -45,20 +40,20 @@
                                 self.state.edit.Name = self.state.name;
                             }
 
-                            self.updateDataOnPage(1);
-                            self.changePopUpState();
+                            self.updatePageData(1);
+                            self.setPopUPForm();
                         });
     }
 
-    updateDataOnPage(take) {
+    updatePageData(take) {
         self = this;
-        this.setLoadAnim(true);
+        this.setPopUPAnim(true);
         
         var skip = (take >= 0 ? this.state.count : this.state.count + take);
 
         if (skip != 0 && skip % feed.DEFAULT_TAKE == 0 &&
             take != feed.DEFAULT_TAKE && take != feed.DEFAULT_REMOVE) {
-            self.setLoadAnim(false);
+            self.setPopUPAnim(false);
             return;
         }
 
@@ -85,14 +80,14 @@
                                 count: jsonObj.Count,
                                 data: t
                             });
-                            self.setLoadAnim(false);
+                            self.setPopUPAnim(false);
                         },
                         function () {
-                            self.setLoadAnim(false);
+                            self.setPopUPAnim(false);
                         });
     }
 
-    setLoadAnim(enable) {
+    setPopUPAnim(enable) {
         this.setState({ loadPopUPClass: enable ? 'background-pop-up' : 'background-pop-up-off' });
     }
 
@@ -105,18 +100,18 @@
                         function () {
                             var position = self.state.data.indexOf(school);
                             self.state.data.splice(position, 1);
-                            self.updateDataOnPage(feed.DEFAULT_REMOVE);
+                            self.updatePageData(feed.DEFAULT_REMOVE);
                         });
     }
 
-    changePopUpState(school) {
+    setPopUPForm(school) {
         this.setState({ name: school ? school.Name : '', edit: school });
 
-        if (this.state.popupClassName === 'invisible-pop-up') {
-            this.setState({ popupClassName: 'visible-pop-up', popupParentClassName: 'background-pop-up' });
+        if (this.state.inputPopUPClass === 'background-pop-up-off') {
+            this.setState({ inputPopUPClass: 'background-pop-up' });
         }
         else {
-            this.setState({ popupClassName: 'invisible-pop-up', popupParentClassName: '' });
+            this.setState({ inputPopUPClass: 'background-pop-up-off' });
         }
     }
 
@@ -129,43 +124,42 @@
        
         return (
             <div className='contentFromReact'>
-                <PopUP state={this.state.loadPopUPClass} />
+                <PopUPLoader state={this.state.loadPopUPClass} />
+
                 <div>
-                    <button className='btn-add' onClick={() => this.changePopUpState()}>Add School</button>
+                    <button className='btn-add' onClick={() => this.setPopUPForm()}>Add School</button>
                 </div>
 
-               <div className='div-table'>
+                <div className='div-table'>
                     <div className='div-row-head'>
                         <div className='div-col-num'>ID</div>
                         <div className='div-col'>Name</div>
                         <div className='div-col-btn'></div>
                         <div className='div-col-btn'></div>
                     </div>
-                   {this.state.data.map((school) => <TableItem key={school.Id} school={school} edit={self.changePopUpState} remove={self.removeData} />)}
-               </div>
+                {   this.state.data.map((school) => <TableItem key={school.Id} school={school} edit={self.setPopUPForm} remove={self.removeData} />)}
+                </div>
 
                 <div>
-                    <button className='btn-more' onClick={() => this.updateDataOnPage(feed.DEFAULT_TAKE)}>See more</button>
+                    <button className='btn-more' onClick={() => this.updatePageData(feed.DEFAULT_TAKE)}>See more</button>
                 </div>
                 
-
-                <div className={this.state.popupParentClassName}>{/*class* {this.STARTE.OPENEDPOPUP ? */}
-                    <div className={this.state.popupClassName}>
-                            <form className='input-form'>
-                                <div>
-                                    <label>
-                                        Name:
-                                        <input type='text' onChange={this.changeInputName} value={this.state.name} placeholder='Enter the school name...' />
-                                    </label>
-                                    <p className='error-mess'>{this.state.nameMess}</p>
-                                </div><hr />
-                                <div>
-                                    <button type='button' className='btn-save' onClick={() => this.saveData()}>Save</button>
-                                    <button type='button' className='btn-cancel' onClick={() => this.changePopUpState()}>Cancel</button>
-                                </div>
-                            </form>
-                    </div>
-                </div> 
+                <PopUP state={this.state.inputPopUPClass}>
+                    <form className='input-form'>
+                        <div>
+                            <label>
+                                Name:
+                                <input type='text' onChange={this.changeInputName} value={this.state.name} placeholder='Enter the school name...' />
+                            </label>
+                            <p className='error-mess'>{this.state.nameMess}</p>
+                        </div>
+                        <hr />
+                        <div>
+                            <button type='button' className='btn-save' onClick={() => this.saveData()}>Save</button>
+                            <button type='button' className='btn-cancel' onClick={() => this.setPopUPForm()}>Cancel</button>
+                        </div>
+                    </form>
+                </PopUP>
             </div>
         );
     }

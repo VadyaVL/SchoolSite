@@ -3,18 +3,14 @@
         super(props);
 
         this.state = {
-            data: [],   // Дані
-            count: 0,   // Наявна кількість
+            data: [],   count: 0,
             schools: [],
-            firstName: '',
-            lastName: '',
-            age: '',
-            firstNameMess: '',
-            lastNameMess: '',
-            ageMess: '',
+            firstName: '',  firstNameMess: '',
+            lastName: '',   lastNameMess: '',
+            age: '',        ageMess: '',
             schoolId: '',
-            popupClassName: 'invisible-pop-up', // назва попапу - покищо....
-            popupParentClassName: '' // назва батька попапу - покищо....
+            loadPopUPClass: 'background-pop-up-off',
+            inputPopUPClass: 'background-pop-up-off'
         };
 
         ajax.callAjax('/School/GetSchoolOptions',
@@ -31,19 +27,20 @@
 
         this.initComboBox = this.initComboBox.bind(this);
 
-        this.changePopUpState = this.changePopUpState.bind(this);
-        this.updateDataOnPage = this.updateDataOnPage.bind(this);
+        this.updatePageData = this.updatePageData.bind(this);
+        this.setPopUPForm = this.setPopUPForm.bind(this);
+        this.setPopUPAnim = this.setPopUPAnim.bind(this);
+
         this.changeFirstName = this.changeFirstName.bind(this);
         this.changeLastName = this.changeLastName.bind(this);
         this.changeAge = this.changeAge.bind(this);
         this.changeSchool = this.changeSchool.bind(this);
         this.changeSubjects = this.changeSubjects.bind(this);
-        this.setLoadAnim = this.setLoadAnim.bind(this);
 
-        this.updateDataOnPage(feed.DEFAULT_TAKE);
+        this.updatePageData(feed.DEFAULT_TAKE);
     }
 
-    setLoadAnim(enable) {
+    setPopUPAnim(enable) {
         this.setState({ loadPopUPClass: enable ? 'background-pop-up' : 'background-pop-up-off' });
     }
 
@@ -105,20 +102,20 @@
                                 }
 
                             }
-                            self.updateDataOnPage(1);
-                            self.changePopUpState();
+                            self.updatePageData(1);
+                            self.setPopUPForm();
                         });
     }
 
-    updateDataOnPage(take) {
+    updatePageData(take) {
+        this.setPopUPAnim(true);
 
         self = this;
-        this.setLoadAnim(true);
         var skip = (take >= 0 ? this.state.count : this.state.count + take);
 
         if (skip != 0 && skip % feed.DEFAULT_TAKE == 0 &&
             take != feed.DEFAULT_TAKE && take != feed.DEFAULT_REMOVE) {
-            self.setLoadAnim(false);
+            self.setPopUPAnim(false);
             return;
         }
 
@@ -145,10 +142,10 @@
                                 count: jsonObj.Count,
                                 data: t
                             });
-                            self.setLoadAnim(false);
+                            self.setPopUPAnim(false);
                         },
                         function () {
-                            self.setLoadAnim(false);
+                            self.setPopUPAnim(false);
                         });
     }
 
@@ -161,11 +158,11 @@
                         function () {
                             var position = self.state.data.indexOf(student);
                             self.state.data.splice(position, 1);
-                            self.updateDataOnPage(feed.DEFAULT_REMOVE);
+                            self.updatePageData(feed.DEFAULT_REMOVE);
                         });
     }
 
-    changePopUpState(student) {
+    setPopUPForm(student) {
         self = this;
 
         this.setState({
@@ -177,11 +174,11 @@
         });
 
 
-        if (this.state.popupClassName === 'invisible-pop-up') {
-            this.setState({ popupClassName: 'visible-pop-up', popupParentClassName: 'background-pop-up' });
+        if (this.state.inputPopUPClass === 'background-pop-up-off') {
+            this.setState({ inputPopUPClass: 'background-pop-up' });
         }
         else {
-            this.setState({ popupClassName: 'invisible-pop-up', popupParentClassName: '' });
+            this.setState({ inputPopUPClass: 'background-pop-up-off' });
         }
     }
 
@@ -223,11 +220,12 @@
     render() {
         return (
             <div className='contentFromReact'>
-                <PopUP state={this.state.loadPopUPClass} />
+                <PopUPLoader state={this.state.loadPopUPClass} />
+
                 <div>
-                    <button className='btn-add' onClick={() => this.changePopUpState()}>Add Student</button>
+                    <button className='btn-add' onClick={() => this.setPopUPForm()}>Add Student</button>
                 </div>
-               <div className='div-table'>
+                <div className='div-table'>
                     <div className='div-row-head'>
                         <div className='div-col-num'>ID</div>
                         <div className='div-col'>First Name</div>
@@ -237,55 +235,54 @@
                         <div className='div-col-btn'></div>
                         <div className='div-col-btn'></div>
                     </div>
-                   {this.state.data.map((student) => <TableItem key={student.Id} student={student} edit={self.changePopUpState} remove={self.removeData}  />)}
-               </div>
-        <div>
-            <button className='btn-add' onClick={() => this.updateDataOnPage(feed.DEFAULT_TAKE)}>See more</button>
-        </div>
+                    {this.state.data.map((student) => <TableItem key={student.Id} student={student} edit={self.setPopUPForm} remove={self.removeData}  />)}
+                </div>
+                <div>
+                    <button className='btn-add' onClick={() => this.updatePageData(feed.DEFAULT_TAKE)}>See more</button>
+                </div>
 
-        <div className={this.state.popupParentClassName}>
-         <div className={this.state.popupClassName}>
-                 <form className='input-form'>
-                         <div>
-                             <div>
+
+                <PopUP state={this.state.inputPopUPClass}>
+                    <form className='input-form'>
+                        <div>
+                            <div>
                                 <label>
                                     First name:
                                     <input type='text' onChange={this.changeFirstName} value={this.state.firstName} placeholder='First name...' />
                                 </label>
-                                 <p className='error-mess'>{this.state.firstNameMess}</p>
-                             </div>
-                             <div>
+                                <p className='error-mess'>{this.state.firstNameMess}</p>
+                            </div>
+                            <div>
                                 <label>
                                     Last name:
                                     <input type='text' onChange={this.changeLastName} value={this.state.lastName} placeholder='Last name...' />
                                 </label>
-                                 <p className='error-mess'>{this.state.lastNameMess}</p>
-                             </div>
-                             <div>
+                                <p className='error-mess'>{this.state.lastNameMess}</p>
+                            </div>
+                            <div>
                                 <label>
                                     Age:
                                     <input type='number' onChange={this.changeAge} value={this.state.age} placeholder='Age...' />
                                 </label>
-                                 <p className='error-mess'>{this.state.ageMess}</p>
-                             </div>
-                             <div>
+                                <p className='error-mess'>{this.state.ageMess}</p>
+                            </div>
+                            <div>
                                 <label>
                                     School:
-                                     <select value={this.state.schoolId} onChange={this.changeSchool} >
-                                         {this.initComboBox()}
-                                     </select>
+                                    <select value={this.state.schoolId} onChange={this.changeSchool}>
+                                        {this.initComboBox()}
+                                    </select>
                                 </label>
-                             </div>
-                         </div>
-                    <hr />
-                    <div>
-                        <button type='button' className='btn-save' onClick={() => this.saveData()}>Save</button>
-                        <button type='button' className='btn-cancel' onClick={() => this.changePopUpState()}>Cancel</button>
-                    </div>
-                 </form>
-         </div>
-        </div>
-        </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div>
+                            <button type='button' className='btn-save' onClick={() => this.saveData()}>Save</button>
+                            <button type='button' className='btn-cancel' onClick={() => this.setPopUPForm()}>Cancel</button>
+                        </div>
+                    </form>
+                </PopUP>
+            </div>
         );
     }
 }
