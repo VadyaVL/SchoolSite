@@ -5,7 +5,7 @@
         this.state = {
             data: [],   count: 0,
             name: '',   nameMess: 'Name is Empty!', errorName: '',
-            loadPopUPClass: 'background-pop-up-off',
+            loadPopUPClass: 'background-pop-up',
             inputPopUPClass: 'background-pop-up-off'
         };
 
@@ -52,7 +52,8 @@
 
         if (skip != 0 && skip % feed.DEFAULT_TAKE == 0 &&
             take != feed.DEFAULT_TAKE && take != feed.DEFAULT_REMOVE) {
-            self.setPopUPAnim(false);
+            if (this.state.loadPopUPClass)
+                self.setPopUPAnim(false);
             return;
         }
 

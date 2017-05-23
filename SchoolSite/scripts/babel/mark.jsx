@@ -7,7 +7,7 @@
             students: [],   student: '',
             subjects: [],   subject: '',
             value: '', errorValue: '', valueMess: 'Mark is Empty!',
-            loadPopUPClass: 'background-pop-up-off',
+            loadPopUPClass: 'background-pop-up',
             inputPopUPClass: 'background-pop-up-off'
         };
 

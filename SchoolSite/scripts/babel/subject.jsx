@@ -5,7 +5,7 @@
         this.state = {
             data: [],   count: 0,
             title: '', errorTitle: '', titleMess: 'Title is Empty!',
-            loadPopUPClass: 'background-pop-up-off',
+            loadPopUPClass: 'background-pop-up',
             inputPopUPClass: 'background-pop-up-off'
         };
 

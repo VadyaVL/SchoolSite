@@ -9,7 +9,7 @@
             lastName: '', errorLastName: '', lastNameMess: 'Last Name is Empty!',
             age: '', errorAge: '', ageMess: 'Age is Empty!',
             schoolId: '',
-            loadPopUPClass: 'background-pop-up-off',
+            loadPopUPClass: 'background-pop-up',
             inputPopUPClass: 'background-pop-up-off'
         };
 
