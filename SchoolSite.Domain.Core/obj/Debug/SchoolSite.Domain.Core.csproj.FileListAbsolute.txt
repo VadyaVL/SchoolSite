@@ -3,3 +3,8 @@ C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite.Doma
 C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite.Domain.Core\obj\Debug\SchoolSite.Domain.Core.csprojResolveAssemblyReference.cache
 C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite.Domain.Core\obj\Debug\SchoolSite.Domain.Core.dll
 C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite.Domain.Core\obj\Debug\SchoolSite.Domain.Core.pdb
+G:\Projects\SchoolSite\SchoolSite.Domain.Core\bin\Debug\SchoolSite.Domain.Core.dll
+G:\Projects\SchoolSite\SchoolSite.Domain.Core\bin\Debug\SchoolSite.Domain.Core.pdb
+G:\Projects\SchoolSite\SchoolSite.Domain.Core\obj\Debug\SchoolSite.Domain.Core.csproj.CoreCompileInputs.cache
+G:\Projects\SchoolSite\SchoolSite.Domain.Core\obj\Debug\SchoolSite.Domain.Core.dll
+G:\Projects\SchoolSite\SchoolSite.Domain.Core\obj\Debug\SchoolSite.Domain.Core.pdb

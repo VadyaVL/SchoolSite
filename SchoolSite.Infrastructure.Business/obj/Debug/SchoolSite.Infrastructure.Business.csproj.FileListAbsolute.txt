@@ -15,3 +15,22 @@ C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite.Infr
 C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite.Infrastructure.Business\obj\Debug\SchoolSite.Infrastructure.Business.csprojResolveAssemblyReference.cache
 C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite.Infrastructure.Business\obj\Debug\SchoolSite.Infrastructure.Business.dll
 C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite.Infrastructure.Business\obj\Debug\SchoolSite.Infrastructure.Business.pdb
+G:\Projects\SchoolSite\SchoolSite.Infrastructure.Business\bin\Debug\SchoolSite.Infrastructure.Business.dll
+G:\Projects\SchoolSite\SchoolSite.Infrastructure.Business\bin\Debug\SchoolSite.Infrastructure.Business.pdb
+G:\Projects\SchoolSite\SchoolSite.Infrastructure.Business\bin\Debug\AutoMapper.dll
+G:\Projects\SchoolSite\SchoolSite.Infrastructure.Business\bin\Debug\SchoolSite.Domain.Core.dll
+G:\Projects\SchoolSite\SchoolSite.Infrastructure.Business\bin\Debug\SchoolSite.Domain.Interfaces.dll
+G:\Projects\SchoolSite\SchoolSite.Infrastructure.Business\bin\Debug\SchoolSite.Infrastructure.Data.dll
+G:\Projects\SchoolSite\SchoolSite.Infrastructure.Business\bin\Debug\SchoolSite.Services.Interfaces.dll
+G:\Projects\SchoolSite\SchoolSite.Infrastructure.Business\bin\Debug\EntityFramework.dll
+G:\Projects\SchoolSite\SchoolSite.Infrastructure.Business\bin\Debug\SchoolSite.Domain.Core.pdb
+G:\Projects\SchoolSite\SchoolSite.Infrastructure.Business\bin\Debug\SchoolSite.Domain.Interfaces.pdb
+G:\Projects\SchoolSite\SchoolSite.Infrastructure.Business\bin\Debug\SchoolSite.Infrastructure.Data.pdb
+G:\Projects\SchoolSite\SchoolSite.Infrastructure.Business\bin\Debug\SchoolSite.Infrastructure.Data.dll.config
+G:\Projects\SchoolSite\SchoolSite.Infrastructure.Business\bin\Debug\SchoolSite.Services.Interfaces.pdb
+G:\Projects\SchoolSite\SchoolSite.Infrastructure.Business\bin\Debug\AutoMapper.xml
+G:\Projects\SchoolSite\SchoolSite.Infrastructure.Business\bin\Debug\EntityFramework.xml
+G:\Projects\SchoolSite\SchoolSite.Infrastructure.Business\obj\Debug\SchoolSite.Infrastructure.Business.csprojResolveAssemblyReference.cache
+G:\Projects\SchoolSite\SchoolSite.Infrastructure.Business\obj\Debug\SchoolSite.Infrastructure.Business.csproj.CoreCompileInputs.cache
+G:\Projects\SchoolSite\SchoolSite.Infrastructure.Business\obj\Debug\SchoolSite.Infrastructure.Business.dll
+G:\Projects\SchoolSite\SchoolSite.Infrastructure.Business\obj\Debug\SchoolSite.Infrastructure.Business.pdb

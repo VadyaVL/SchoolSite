@@ -12,3 +12,18 @@ C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite.Infr
 C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite.Infrastructure.Data\obj\Debug\SchoolSite.Infrastructure.Data.csprojResolveAssemblyReference.cache
 C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite.Infrastructure.Data\obj\Debug\SchoolSite.Infrastructure.Data.dll
 C:\Users\User 5\documents\visual studio 2015\Projects\SchoolSite\SchoolSite.Infrastructure.Data\obj\Debug\SchoolSite.Infrastructure.Data.pdb
+G:\Projects\SchoolSite\SchoolSite.Infrastructure.Data\bin\Debug\SchoolSite.Infrastructure.Data.dll.config
+G:\Projects\SchoolSite\SchoolSite.Infrastructure.Data\bin\Debug\SchoolSite.Infrastructure.Data.dll
+G:\Projects\SchoolSite\SchoolSite.Infrastructure.Data\bin\Debug\SchoolSite.Infrastructure.Data.pdb
+G:\Projects\SchoolSite\SchoolSite.Infrastructure.Data\bin\Debug\EntityFramework.dll
+G:\Projects\SchoolSite\SchoolSite.Infrastructure.Data\bin\Debug\EntityFramework.SqlServer.dll
+G:\Projects\SchoolSite\SchoolSite.Infrastructure.Data\bin\Debug\SchoolSite.Domain.Core.dll
+G:\Projects\SchoolSite\SchoolSite.Infrastructure.Data\bin\Debug\SchoolSite.Domain.Interfaces.dll
+G:\Projects\SchoolSite\SchoolSite.Infrastructure.Data\bin\Debug\SchoolSite.Domain.Core.pdb
+G:\Projects\SchoolSite\SchoolSite.Infrastructure.Data\bin\Debug\SchoolSite.Domain.Interfaces.pdb
+G:\Projects\SchoolSite\SchoolSite.Infrastructure.Data\bin\Debug\EntityFramework.xml
+G:\Projects\SchoolSite\SchoolSite.Infrastructure.Data\bin\Debug\EntityFramework.SqlServer.xml
+G:\Projects\SchoolSite\SchoolSite.Infrastructure.Data\obj\Debug\SchoolSite.Infrastructure.Data.csprojResolveAssemblyReference.cache
+G:\Projects\SchoolSite\SchoolSite.Infrastructure.Data\obj\Debug\SchoolSite.Infrastructure.Data.csproj.CoreCompileInputs.cache
+G:\Projects\SchoolSite\SchoolSite.Infrastructure.Data\obj\Debug\SchoolSite.Infrastructure.Data.dll
+G:\Projects\SchoolSite\SchoolSite.Infrastructure.Data\obj\Debug\SchoolSite.Infrastructure.Data.pdb

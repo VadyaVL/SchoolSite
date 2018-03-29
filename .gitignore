@@ -1,0 +1,14 @@
+
+.vs/
+SchoolSite.Domain.Core/bin/
+SchoolSite.Domain.Core/obj/
+SchoolSite.Domain.Interfaces/bin/
+SchoolSite.Domain.Interfaces/obj/
+SchoolSite.Infrastructure.Business/bin/
+SchoolSite.Infrastructure.Business/obj/
+SchoolSite.Infrastructure.Data/bin/
+SchoolSite.Infrastructure.Data/obj/
+SchoolSite.Services.Interfaces/bin/
+SchoolSite.Services.Interfaces/obj/
+SchoolSite/bin/
+SchoolSite/obj/
